@@ -1,0 +1,19 @@
+package de.lunoro.bedwars.game.timer;
+
+import de.lunoro.bedwars.game.IGameObject;
+import lombok.Getter;
+
+public class GameTimer implements IGameObject {
+
+    @Getter
+    private int timer = 0;
+
+    @Override
+    public void update(int gameTick) {
+        timer++;
+    }
+
+    @Override
+    public void render(int gameTick) {
+    }
+}

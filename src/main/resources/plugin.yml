@@ -1,0 +1,7 @@
+name: Bedwars
+version: '${project.version}'
+main: de.lunoro.bedwars.Bedwars
+api-version: 1.17
+authors: [Lunoro]
+commands:
+    forcestart:
