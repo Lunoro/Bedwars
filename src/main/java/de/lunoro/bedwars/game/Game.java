@@ -4,6 +4,7 @@ import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.spawner.ItemSpawner;
 import de.lunoro.bedwars.game.team.Team;
 import de.lunoro.bedwars.game.timer.GameTimer;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,9 +22,12 @@ public class Game {
     private final Plugin plugin;
     private GamePhase gamePhase;
     private final GameTimer gameTimer;
-    private final Location endLocation;
     private final int playerCountToStart;
     private int taskId;
+    @Getter
+    private final Location endLocation;
+    @Getter
+    private final Location spectatorLocation;
 
     public Game(Plugin plugin, ConfigContainer configContainer) {
         this.plugin = plugin;
@@ -34,6 +38,7 @@ public class Game {
         System.out.println(configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart"));
         playerCountToStart = 2;
         endLocation = (Location) configContainer.getFile("locations").getFileConfiguration().get("endLocation");
+        spectatorLocation = (Location) configContainer.getFile("locations").getFileConfiguration().get("spectatorLocation");
     }
 
     public void start() {

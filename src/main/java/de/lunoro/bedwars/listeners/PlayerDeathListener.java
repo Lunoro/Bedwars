@@ -2,6 +2,7 @@ package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
 import lombok.AllArgsConstructor;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,12 +15,13 @@ public class PlayerDeathListener implements Listener {
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent event) {
-        Player player = event.getEntity();
+        Player player = event.getEntity().getPlayer();
         Player killer = event.getEntity().getKiller();
 
         if (killer != null) {
-            event.setDeathMessage(killer.getDisplayName() + " -> " + player.getDisplayName());
+            event.setDeathMessage(ChatColor.RED + killer.getDisplayName() + ChatColor.GRAY + " -> " + ChatColor.WHITE + player.getDisplayName());
         }
 
+        event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
     }
 }
