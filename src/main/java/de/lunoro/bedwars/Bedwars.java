@@ -3,8 +3,10 @@ package de.lunoro.bedwars;
 import de.lunoro.bedwars.commands.ForceStartCommand;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
+import de.lunoro.bedwars.listeners.PlayerDeathListener;
 import de.lunoro.bedwars.listeners.PlayerJoinListener;
 import de.lunoro.bedwars.listeners.PlayerQuitListener;
+import de.lunoro.bedwars.listeners.PlayerRespawnListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +37,8 @@ public final class Bedwars extends JavaPlugin {
     }
 
     private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(game), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
     }

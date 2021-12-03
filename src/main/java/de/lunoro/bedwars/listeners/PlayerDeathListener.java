@@ -23,5 +23,6 @@ public class PlayerDeathListener implements Listener {
         }
 
         event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
+        player.spigot().respawn();
     }
 }

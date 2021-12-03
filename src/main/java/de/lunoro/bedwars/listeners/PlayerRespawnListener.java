@@ -17,7 +17,6 @@ public class PlayerRespawnListener implements Listener {
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
         Team team = game.getTeamOfPlayer(player);
-        player.spigot().respawn();
 
         if (team == null || !team.hasBed()) {
             player.teleport(game.getSpectatorLocation());
