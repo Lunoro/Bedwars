@@ -13,12 +13,10 @@ import org.bukkit.plugin.Plugin;
 
 public class Game {
 
+    @Getter
     private final TeamContainer teamContainer;
+    @Getter
     private final ItemSpawnerContainer itemContainer;
-    private final Plugin plugin;
-    private final GameTimer gameTimer;
-    private final int playerCountToStart;
-    private int taskId;
     @Getter
     private GamePhase gamePhase;
     @Getter
@@ -27,11 +25,15 @@ public class Game {
     private final Location endLocation;
     @Getter
     private final Location spectatorLocation;
+    private final Plugin plugin;
+    private final GameTimer gameTimer;
+    private final int playerCountToStart;
+    private int taskId;
 
-    public Game(Plugin plugin, ConfigContainer configContainer, TeamContainer teamContainer, ItemSpawnerContainer itemContainer) {
+    public Game(Plugin plugin, ConfigContainer configContainer) {
         this.plugin = plugin;
-        this.teamContainer = teamContainer;
-        this.itemContainer = itemContainer;
+        this.teamContainer = new TeamContainer(configContainer);
+        this.itemContainer = new ItemSpawnerContainer(configContainer);
 
         gamePhase = GamePhase.START;
         gameTimer = new GameTimer();
@@ -50,12 +52,6 @@ public class Game {
 
     public void forceStart() {
         startGame(true);
-    }
-
-    public void stop() {
-        Bukkit.getScheduler().cancelTask(taskId);
-        gamePhase = GamePhase.END;
-        teamContainer.teleportEachTeam(endLocation);
     }
 
     public void save() {
@@ -87,5 +83,24 @@ public class Game {
         if (!isForceStart && Bukkit.getOnlinePlayers().size() >= playerCountToStart) {
             Bukkit.getScheduler().cancelTask(taskId);
         }
+    }
+
+    public void stopIfGameIsOver() {
+        if (gameHasWinner()) {
+            stop();
+        }
+    }
+
+    public void stop() {
+        Bukkit.getScheduler().cancelTask(taskId);
+        gamePhase = GamePhase.END;
+        teamContainer.teleportEachTeam(endLocation);
+    }
+
+    private boolean gameHasWinner() {
+        if (teamContainer.getWinner() != null) {
+            return true;
+        }
+        return false;
     }
 }

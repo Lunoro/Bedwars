@@ -7,14 +7,14 @@ import org.bukkit.entity.Player;
 public class TeamMember {
 
     private final Player player;
-    private boolean canRespawn;
+    private boolean respawnable;
 
     public TeamMember(Player player) {
         this.player = player;
-        canRespawn = true;
+        respawnable = true;
     }
 
     public void switchRespawn() {
-        canRespawn = false;
+        respawnable = false;
     }
 }

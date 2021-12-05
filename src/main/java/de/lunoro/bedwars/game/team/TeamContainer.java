@@ -56,6 +56,20 @@ public class TeamContainer {
         teamList.add(team);
     }
 
+    public Team getWinner() {
+        Team winner = null;
+        int i = 0;
+        for (Team team : teamList) {
+            if (!team.entireTeamIsDead()) {
+                i++;
+            }
+            if (i == 1) {
+                winner = team;
+            }
+        }
+        return winner;
+    }
+
     public void spawnEachTeam() {
         for (Team team : teamList) {
             team.spawnTeam();

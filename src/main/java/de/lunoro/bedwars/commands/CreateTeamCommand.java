@@ -1,7 +1,7 @@
 package de.lunoro.bedwars.commands;
 
+import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
-import de.lunoro.bedwars.game.team.TeamContainer;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class CreateTeamCommand implements CommandExecutor {
 
-    private TeamContainer teamContainer;
+    private final Game game;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -32,7 +32,7 @@ public class CreateTeamCommand implements CommandExecutor {
             return false;
         }
 
-        teamContainer.addTeam(new Team(args[0], args[1].charAt(1)));
+        game.getTeamContainer().addTeam(new Team(args[0], args[1].charAt(1)));
         return true;
     }
 }

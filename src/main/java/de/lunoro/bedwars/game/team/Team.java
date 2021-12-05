@@ -17,7 +17,6 @@ public class Team {
     private final List<TeamMember> memberList;
     private final char colorCode;
     private final ChatColor color;
-    private final boolean isDefeated;
     @Setter
     private Location spawnLocation;
     @Setter
@@ -27,7 +26,6 @@ public class Team {
         this.name = name;
         this.colorCode = colorCode;
         this.color = ChatColor.getByChar(colorCode);
-        this.isDefeated = false;
 
         memberList = new ArrayList<>();
     }
@@ -37,8 +35,8 @@ public class Team {
         this.colorCode = colorCode;
         this.spawnLocation = spawnLocation;
         this.bedLocation = bedLocation;
-        this.color = ChatColor.getByChar(colorCode);
-        this.isDefeated = false;
+        ChatColor color = ChatColor.getByChar(colorCode);
+        this.color = color;
 
         memberList = new ArrayList<>();
     }
@@ -51,6 +49,15 @@ public class Team {
         for (TeamMember teamMember : memberList) {
             teamMember.getPlayer().teleport(location);
         }
+    }
+
+    public boolean entireTeamIsDead() {
+        for (TeamMember teamMember : memberList) {
+            if (teamMember.isRespawnable()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean hasBed() {

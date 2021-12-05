@@ -5,8 +5,6 @@ import de.lunoro.bedwars.commands.ForceStartCommand;
 import de.lunoro.bedwars.commands.SetLocationCommand;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
-import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
-import de.lunoro.bedwars.game.team.TeamContainer;
 import de.lunoro.bedwars.listeners.PlayerDeathListener;
 import de.lunoro.bedwars.listeners.PlayerJoinListener;
 import de.lunoro.bedwars.listeners.PlayerQuitListener;
@@ -18,8 +16,6 @@ public final class Bedwars extends JavaPlugin {
 
     private Game game;
     private ConfigContainer configContainer;
-    private TeamContainer teamContainer;
-    private ItemSpawnerContainer itemSpawnerContainer;
 
     @Override
     public void onEnable() {
@@ -31,10 +27,8 @@ public final class Bedwars extends JavaPlugin {
 
     private void init() {
         configContainer = new ConfigContainer(this);
-        teamContainer = new TeamContainer(configContainer);
-        itemSpawnerContainer = new ItemSpawnerContainer(configContainer);
         if (!(configContainer.getFile("config").getFileConfiguration().getBoolean("startInBuildingMode"))) {
-            game = new Game(this, configContainer, teamContainer, itemSpawnerContainer);
+            game = new Game(this, configContainer);
         }
     }
 
@@ -45,14 +39,14 @@ public final class Bedwars extends JavaPlugin {
     }
 
     private void registerCommands() {
-        Bukkit.getPluginCommand("createteam").setExecutor(new CreateTeamCommand(teamContainer));
-        Bukkit.getPluginCommand("setlocation").setExecutor(new SetLocationCommand(configContainer, teamContainer));
+        Bukkit.getPluginCommand("createteam").setExecutor(new CreateTeamCommand(game));
+        Bukkit.getPluginCommand("setlocation").setExecutor(new SetLocationCommand(configContainer, game));
         Bukkit.getPluginCommand("forcestart").setExecutor(new ForceStartCommand(game));
     }
 
     private void registerEvents() {
-        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game, teamContainer), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(game), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
     }

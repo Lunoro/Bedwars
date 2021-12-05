@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class ForceStartCommand implements CommandExecutor {
 
-    private Game game;
+    private final Game game;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {

@@ -2,8 +2,8 @@ package de.lunoro.bedwars.commands;
 
 import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
+import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
-import de.lunoro.bedwars.game.team.TeamContainer;
 import lombok.AllArgsConstructor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public class SetLocationCommand implements CommandExecutor {
 
-    private ConfigContainer configContainer;
-    private TeamContainer teamContainer;
+    private final ConfigContainer configContainer;
+    private final Game game;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -53,7 +53,7 @@ public class SetLocationCommand implements CommandExecutor {
                 break;
         }
 
-        Team team = teamContainer.getTeamByName(args[0]);
+        Team team = game.getTeamContainer().getTeamByName(args[0]);
 
         if (team != null) {
             switch (args[1]) {
@@ -70,7 +70,7 @@ public class SetLocationCommand implements CommandExecutor {
             }
         }
 
-        teamContainer.save();
+        game.getTeamContainer().save();
         locationsFile.save();
         return true;
     }

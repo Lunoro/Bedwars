@@ -1,12 +1,17 @@
 package de.lunoro.bedwars.listeners;
 
+import de.lunoro.bedwars.game.Game;
+import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+@AllArgsConstructor
 public class PlayerDeathListener implements Listener {
+
+    private final Game game;
 
     @EventHandler
     public void onPlayerKill(PlayerDeathEvent event) {
@@ -19,6 +24,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
+        game.stopIfGameIsOver();
         player.spigot().respawn();
     }
 }
