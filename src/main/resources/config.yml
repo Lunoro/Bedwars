@@ -1,6 +1,11 @@
-//
-//  Bedwars plugin by Lunoro.
-//
+#
+#  Bedwars plugin by Lunoro.
+#
 
-teams: 2
-playerCountToStart: 1
+#Game wont start if true.
+startInBuildingMode: true
+
+#Amount of teams.
+
+#Amount of players it will take to start the game.
+playerCountToStart: 2

@@ -1,6 +1,7 @@
 package de.lunoro.bedwars.game.spawner;
 
 import de.lunoro.bedwars.game.IGameObject;
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class ItemSpawner implements IGameObject {
 
     private final Material material;
@@ -18,6 +20,12 @@ public class ItemSpawner implements IGameObject {
         this.material = material;
         this.dropDuration = dropDuration;
         locationList = new ArrayList<>();
+    }
+
+    public ItemSpawner(String materialName, List<Location> locationList, int dropDuration) {
+        this.material = Material.getMaterial(materialName);
+        this.dropDuration = dropDuration;
+        this.locationList = locationList;
     }
 
     @Override

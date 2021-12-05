@@ -1,124 +1,91 @@
 package de.lunoro.bedwars.game;
 
 import de.lunoro.bedwars.config.ConfigContainer;
-import de.lunoro.bedwars.game.spawner.ItemSpawner;
-import de.lunoro.bedwars.game.team.Team;
+import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
 import de.lunoro.bedwars.game.timer.GameTimer;
+import de.lunoro.bedwars.game.team.TeamContainer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.Sound;
 import org.bukkit.plugin.Plugin;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game {
 
-    private final List<Team> teamList;
-    private final List<ItemSpawner> itemSpawnerList;
+    private final TeamContainer teamContainer;
+    private final ItemSpawnerContainer itemContainer;
     private final Plugin plugin;
-    private GamePhase gamePhase;
     private final GameTimer gameTimer;
     private final int playerCountToStart;
     private int taskId;
+    @Getter
+    private GamePhase gamePhase;
+    @Getter
+    private final Location spawnLocation;
     @Getter
     private final Location endLocation;
     @Getter
     private final Location spectatorLocation;
 
-    public Game(Plugin plugin, ConfigContainer configContainer) {
+    public Game(Plugin plugin, ConfigContainer configContainer, TeamContainer teamContainer, ItemSpawnerContainer itemContainer) {
         this.plugin = plugin;
-        teamList = new ArrayList<>();
-        itemSpawnerList = new ArrayList<>();
+        this.teamContainer = teamContainer;
+        this.itemContainer = itemContainer;
+
         gamePhase = GamePhase.START;
         gameTimer = new GameTimer();
-        System.out.println(configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart"));
-        playerCountToStart = 2;
-        endLocation = (Location) configContainer.getFile("locations").getFileConfiguration().get("endLocation");
-        spectatorLocation = (Location) configContainer.getFile("locations").getFileConfiguration().get("spectatorLocation");
+
+        playerCountToStart = configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart");
+        spawnLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spawn");
+        endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
+        spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
     }
 
     public void start() {
         if (Bukkit.getOnlinePlayers().size() >= playerCountToStart) {
-            startStartTimer(false);
+            startGame(false);
         }
     }
 
     public void forceStart() {
-        startStartTimer(true);
+        startGame(true);
     }
 
     public void stop() {
-        if (gamePhase != GamePhase.RUNNING) {
-            return;
-        }
         Bukkit.getScheduler().cancelTask(taskId);
         gamePhase = GamePhase.END;
-        teleportEachTeamToEnd();
+        teamContainer.teleportEachTeam(endLocation);
     }
 
-    private void startStartTimer(boolean isForceStart) {
-        AtomicInteger atomicInteger = new AtomicInteger(11);
-        Bukkit.getScheduler().runTaskTimer(plugin, bukkitTask -> {
-            Bukkit.getOnlinePlayers().forEach(player -> player.sendTitle(ChatColor.YELLOW + "" + atomicInteger.decrementAndGet(), ""));
-            if (!isForceStart && Bukkit.getOnlinePlayers().size() >= playerCountToStart) {
-                bukkitTask.cancel();
-            }
-            if (atomicInteger.get() == 1) {
-                startGame();
-                bukkitTask.cancel();
-            }
-        }, 0, 20);
+    public void save() {
+        itemContainer.save();
+        teamContainer.save();
     }
 
-    private void startGame() {
+    private void startGame(boolean isForceStart) {
+        startGameClock(isForceStart);
         gamePhase = GamePhase.RUNNING;
-        spawnEachTeam();
-        startGameClock();
+        teamContainer.spawnEachTeam();
     }
 
-    private void startGameClock() {
+    private void startGameClock(boolean isForceStart) {
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            if (gameTimer.getTimer() < 0) {
+                printStartTimer(isForceStart, gameTimer.getTimer() * -1);
+            }
             gameTimer.update(gameTimer.getTimer());
-            updateItemSpawner(gameTimer.getTimer());
+            itemContainer.updateItemSpawner(gameTimer.getTimer());
         }, 0, 20);
     }
 
-    private void updateItemSpawner(int gameTicks) {
-        for (ItemSpawner itemSpawner : itemSpawnerList) {
-            itemSpawner.update(gameTicks);
+    private void printStartTimer(boolean isForceStart, int intToPrint) {
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            player.sendTitle(ChatColor.YELLOW + "" + intToPrint, "", 10, 20, 10);
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1f);
+        });
+        if (!isForceStart && Bukkit.getOnlinePlayers().size() >= playerCountToStart) {
+            Bukkit.getScheduler().cancelTask(taskId);
         }
-    }
-
-    private void spawnEachTeam() {
-        for (Team team : teamList) {
-            team.spawnTeam();
-        }
-    }
-
-    private void teleportEachTeamToEnd() {
-        for (Team team : teamList) {
-            team.teleportTeam(endLocation);
-        }
-    }
-
-    public Team getTeamOfPlayer(Player player) {
-        for (Team team : teamList) {
-            if (team.getTeamMember(player) != null) {
-                return team;
-            }
-        }
-        return null;
-    }
-
-    public void addSpawner(ItemSpawner itemSpawner) {
-        itemSpawnerList.add(itemSpawner);
-    }
-
-    public void removeSpawner(ItemSpawner itemSpawner) {
-        itemSpawnerList.remove(itemSpawner);
     }
 }

@@ -1,6 +1,8 @@
 package de.lunoro.bedwars.game.team;
 
+import de.lunoro.bedwars.game.team.teammember.TeamMember;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -11,16 +13,34 @@ import java.util.List;
 @Getter
 public class Team {
 
+    private final String name;
     private final List<TeamMember> memberList;
+    private final char colorCode;
     private final ChatColor color;
-    private final Location spawnLocation;
-    private final Location bedLocation;
+    private final boolean isDefeated;
+    @Setter
+    private Location spawnLocation;
+    @Setter
+    private Location bedLocation;
 
-    public Team(ChatColor color, Location spawnLocation, Location bedLocation) {
+    public Team(String name, char colorCode) {
+        this.name = name;
+        this.colorCode = colorCode;
+        this.color = ChatColor.getByChar(colorCode);
+        this.isDefeated = false;
+
         memberList = new ArrayList<>();
-        this.bedLocation = bedLocation;
-        this.color = color;
+    }
+
+    public Team(String name, char colorCode, Location spawnLocation, Location bedLocation) {
+        this.name = name;
+        this.colorCode = colorCode;
         this.spawnLocation = spawnLocation;
+        this.bedLocation = bedLocation;
+        this.color = ChatColor.getByChar(colorCode);
+        this.isDefeated = false;
+
+        memberList = new ArrayList<>();
     }
 
     public void spawnTeam() {

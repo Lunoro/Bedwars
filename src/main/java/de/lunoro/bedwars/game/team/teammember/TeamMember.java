@@ -1,4 +1,4 @@
-package de.lunoro.bedwars.game.team;
+package de.lunoro.bedwars.game.team.teammember;
 
 import lombok.Getter;
 import org.bukkit.entity.Player;

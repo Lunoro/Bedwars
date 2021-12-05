@@ -6,7 +6,7 @@ import lombok.Getter;
 public class GameTimer implements IGameObject {
 
     @Getter
-    private int timer = 0;
+    private int timer = -10;
 
     @Override
     public void update(int gameTick) {
