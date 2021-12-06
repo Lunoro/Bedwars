@@ -3,9 +3,11 @@ package de.lunoro.bedwars.game.team;
 import de.lunoro.bedwars.game.team.teammember.TeamMember;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,7 @@ public class Team {
     private final List<TeamMember> memberList;
     private final char colorCode;
     private final ChatColor color;
+    private org.bukkit.scoreboard.Team scoreBoardTeam;
     @Setter
     private Location spawnLocation;
     @Setter
@@ -28,6 +31,7 @@ public class Team {
         this.color = ChatColor.getByChar(colorCode);
         this.spawnLocation = null;
         this.bedLocation = null;
+        initScoreboardTeam();
 
         memberList = new ArrayList<>();
     }
@@ -38,8 +42,19 @@ public class Team {
         this.spawnLocation = spawnLocation;
         this.bedLocation = bedLocation;
         this.color = ChatColor.getByChar(colorCode);
+        initScoreboardTeam();
 
         memberList = new ArrayList<>();
+
+    }
+
+    private void initScoreboardTeam() {
+        final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        scoreBoardTeam = scoreboard.getTeam(name);
+        if (scoreBoardTeam == null) {
+            scoreBoardTeam = scoreboard.registerNewTeam(name);
+        }
+        scoreBoardTeam.setColor(color);
     }
 
     public void spawnTeam() {
@@ -62,14 +77,17 @@ public class Team {
     }
 
     public boolean hasBed() {
-        return bedLocation.getBlock().getType().name().contains("bed");
+        return bedLocation.getBlock().getType().name().contains("BED");
     }
 
     public void addTeamMember(Player player) {
+        player.setDisplayName(color + player.getName() + "");
+        scoreBoardTeam.addEntry(player.getName());
         memberList.add(new TeamMember(player));
     }
 
     public void removeTeamMember(Player player) {
+        player.setDisplayName(ChatColor.WHITE + player.getName());
         memberList.remove(getTeamMember(player));
     }
 
@@ -80,5 +98,9 @@ public class Team {
             }
         }
         return null;
+    }
+
+    public void unregisterScoreboardTeam() {
+        scoreBoardTeam.unregister();
     }
 }

@@ -2,6 +2,7 @@ package de.lunoro.bedwars.commands;
 
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.GamePhase;
+import de.lunoro.bedwars.game.team.Team;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,10 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor
-public class ForceStartCommand implements CommandExecutor {
+public class JoinTeamCommand implements CommandExecutor {
 
     private final Game game;
-    private final boolean isStartedInBuildingMode;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -23,7 +23,7 @@ public class ForceStartCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("bedwars.command.forcestart")) {
+        if (!player.hasPermission("bedwars.command.jointeam")) {
             player.sendMessage("Dafür hast du keine Berechtigung!");
             return false;
         }
@@ -33,13 +33,26 @@ public class ForceStartCommand implements CommandExecutor {
             return false;
         }
 
-        if (isStartedInBuildingMode) {
-            player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
+        Team teamToJoin = game.getTeamContainer().getTeamByName(args[0]);
+
+        if (teamToJoin == null) {
+            player.sendMessage("Team nicht gefunden!");
             return false;
         }
 
-        game.forceStart();
-        player.sendMessage("Spiel wurde gestartet.");
+        if (teamToJoin.getTeamMember(player) != null) {
+            player.sendMessage("Du befindest dich bereits in diesem Team.");
+            return false;
+        }
+
+        Team teamPlayerIsCurrentlyIn = game.getTeamContainer().getTeamOfPlayer(player);
+
+        if (teamPlayerIsCurrentlyIn != null) {
+            teamPlayerIsCurrentlyIn.removeTeamMember(player);
+        }
+
+        teamToJoin.addTeamMember(player);
+        player.sendMessage("Du bist " + args[0] + " beigetreten.");
         return true;
     }
 }

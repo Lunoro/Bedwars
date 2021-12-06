@@ -16,7 +16,6 @@ public class CreateTeamCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        System.out.println("Fired command");
         if (!(sender instanceof Player)) {
             return false;
         }

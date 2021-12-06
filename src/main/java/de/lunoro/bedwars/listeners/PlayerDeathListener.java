@@ -1,6 +1,7 @@
 package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
+import de.lunoro.bedwars.game.team.Team;
 import lombok.AllArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,12 +18,14 @@ public class PlayerDeathListener implements Listener {
     public void onPlayerKill(PlayerDeathEvent event) {
         Player player = event.getEntity().getPlayer();
         Player killer = event.getEntity().getKiller();
+        Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (player.equals(killer) || killer != null) {
             event.setDeathMessage(ChatColor.RED + killer.getDisplayName() + ChatColor.GRAY + " -> " + ChatColor.WHITE + player.getDisplayName());
             return;
         }
 
+        team.getTeamMember(player).switchRespawn();
         event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
         game.stopIfGameIsOver();
         player.spigot().respawn();

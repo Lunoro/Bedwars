@@ -21,7 +21,6 @@ public class PlayerRespawnListener implements Listener {
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (!team.hasBed()) {
-            team.getTeamMember(player).switchRespawn();
             player.setGameMode(GameMode.SPECTATOR);
             player.teleport(game.getSpectatorLocation());
             return;

@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Scoreboard;
 
 public class Game {
 
@@ -54,15 +55,19 @@ public class Game {
         startGame(true);
     }
 
-    public void save() {
+    public void shutdown() {
+        stop();
         itemContainer.save();
         teamContainer.save();
+        teamContainer.unregisterAllScoreboardTeams();
     }
 
     private void startGame(boolean isForceStart) {
         startGameClock(isForceStart);
-        gamePhase = GamePhase.RUNNING;
-        teamContainer.spawnEachTeam();
+        if (gameTimer.getTimer() == 0) {
+            gamePhase = GamePhase.RUNNING;
+            teamContainer.spawnEachTeam();
+        }
     }
 
     private void startGameClock(boolean isForceStart) {

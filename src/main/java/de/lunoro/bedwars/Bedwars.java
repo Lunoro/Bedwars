@@ -3,10 +3,7 @@ package de.lunoro.bedwars;
 import de.lunoro.bedwars.commands.*;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
-import de.lunoro.bedwars.listeners.PlayerDeathListener;
-import de.lunoro.bedwars.listeners.PlayerJoinListener;
-import de.lunoro.bedwars.listeners.PlayerQuitListener;
-import de.lunoro.bedwars.listeners.PlayerRespawnListener;
+import de.lunoro.bedwars.listeners.*;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -31,7 +28,7 @@ public final class Bedwars extends JavaPlugin {
     }
 
     public void onDisable() {
-        game.save();
+        game.shutdown();
         configContainer.getFile("locations").save();
         saveDefaultConfig();
     }
@@ -44,6 +41,7 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginCommand("additemspawnerlocation").setExecutor(new AddItemSpawnerLocationCommand(game.getItemContainer()));
         Bukkit.getPluginCommand("removeitemspawnerlocation").setExecutor(new RemoveItemSpawnerLocationCommand(game.getItemContainer()));
         Bukkit.getPluginCommand("removeteam").setExecutor(new RemoveTeamCommand(game.getTeamContainer()));
+        Bukkit.getPluginCommand("jointeam").setExecutor(new JoinTeamCommand(game));
     }
 
     private void registerEvents() {
@@ -51,6 +49,7 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game, isStartedInBuildingMode), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(game.getTeamContainer()), this);
+        Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
     }
 }
 

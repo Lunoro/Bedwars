@@ -105,12 +105,9 @@ public class TeamContainer {
         return null;
     }
 
-    public Team getTeamByColor(char colorCode) {
+    public void unregisterAllScoreboardTeams() {
         for (Team team : teamList) {
-            if (team.getColorCode() == colorCode) {
-                return team;
-            }
+            team.unregisterScoreboardTeam();
         }
-        return null;
     }
 }
