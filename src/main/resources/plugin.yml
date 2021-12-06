@@ -7,3 +7,9 @@ depend: [ProtocolLib]
 commands:
     forcestart:
     setlocation:
+    createitemspawner:
+    additemspawnerlocation:
+    additemspawnerlocation:
+    removeitemspawnerlocation:
+    removeteam:
+    createteam:

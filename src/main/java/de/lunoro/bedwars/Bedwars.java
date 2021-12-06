@@ -1,8 +1,6 @@
 package de.lunoro.bedwars;
 
-import de.lunoro.bedwars.commands.CreateTeamCommand;
-import de.lunoro.bedwars.commands.ForceStartCommand;
-import de.lunoro.bedwars.commands.SetLocationCommand;
+import de.lunoro.bedwars.commands.*;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.listeners.PlayerDeathListener;
@@ -16,6 +14,7 @@ public final class Bedwars extends JavaPlugin {
 
     private Game game;
     private ConfigContainer configContainer;
+    private boolean isStartedInBuildingMode;
 
     @Override
     public void onEnable() {
@@ -27,9 +26,8 @@ public final class Bedwars extends JavaPlugin {
 
     private void init() {
         configContainer = new ConfigContainer(this);
-        if (!(configContainer.getFile("config").getFileConfiguration().getBoolean("startInBuildingMode"))) {
-            game = new Game(this, configContainer);
-        }
+        isStartedInBuildingMode = configContainer.getFile("config").getFileConfiguration().getBoolean("startInBuildingMode");
+        game = new Game(this, configContainer);
     }
 
     public void onDisable() {
@@ -39,16 +37,20 @@ public final class Bedwars extends JavaPlugin {
     }
 
     private void registerCommands() {
-        Bukkit.getPluginCommand("createteam").setExecutor(new CreateTeamCommand(game));
-        Bukkit.getPluginCommand("setlocation").setExecutor(new SetLocationCommand(configContainer, game));
-        Bukkit.getPluginCommand("forcestart").setExecutor(new ForceStartCommand(game));
+        Bukkit.getPluginCommand("createteam").setExecutor(new CreateTeamCommand(game.getTeamContainer()));
+        Bukkit.getPluginCommand("setlocation").setExecutor(new SetLocationCommand(configContainer, game.getTeamContainer()));
+        Bukkit.getPluginCommand("forcestart").setExecutor(new ForceStartCommand(game, isStartedInBuildingMode));
+        Bukkit.getPluginCommand("createitemspawner").setExecutor(new CreateItemSpawnerCommand(game.getItemContainer()));
+        Bukkit.getPluginCommand("additemspawnerlocation").setExecutor(new AddItemSpawnerLocationCommand(game.getItemContainer()));
+        Bukkit.getPluginCommand("removeitemspawnerlocation").setExecutor(new RemoveItemSpawnerLocationCommand(game.getItemContainer()));
+        Bukkit.getPluginCommand("removeteam").setExecutor(new RemoveTeamCommand(game.getTeamContainer()));
     }
 
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new PlayerDeathListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game, isStartedInBuildingMode), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(game.getTeamContainer()), this);
     }
 }
 

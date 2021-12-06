@@ -16,8 +16,8 @@ public class TeamContainer {
     private final ConfigContainer configContainer;
 
     public TeamContainer(ConfigContainer configContainer) {
-        this.teamList = loadTeams();
         this.configContainer = configContainer;
+        this.teamList = loadTeams();
     }
 
     private List<Team> loadTeams() {
@@ -53,6 +53,10 @@ public class TeamContainer {
     }
 
     public void addTeam(Team team) {
+        teamList.add(team);
+    }
+
+    public void removeTeam(Team team) {
         teamList.add(team);
     }
 
@@ -92,6 +96,7 @@ public class TeamContainer {
     }
 
     public Team getTeamByName(String name) {
+        System.out.println(teamList);
         for (Team team : teamList) {
             if (team.getName().equals(name)) {
                 return team;

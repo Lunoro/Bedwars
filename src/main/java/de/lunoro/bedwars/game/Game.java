@@ -98,9 +98,6 @@ public class Game {
     }
 
     private boolean gameHasWinner() {
-        if (teamContainer.getWinner() != null) {
-            return true;
-        }
-        return false;
+        return teamContainer.getWinner() != null;
     }
 }

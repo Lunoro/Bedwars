@@ -12,9 +12,11 @@ import org.bukkit.entity.Player;
 public class ForceStartCommand implements CommandExecutor {
 
     private final Game game;
+    private final boolean isStartedInBuildingMode;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        System.out.println("Fired command");
         if (!(sender instanceof Player)) {
             sender.sendMessage("Du bist kein Spieler!");
             return false;
@@ -32,8 +34,13 @@ public class ForceStartCommand implements CommandExecutor {
             return false;
         }
 
+        if (isStartedInBuildingMode) {
+            player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
+            return false;
+        }
+
         game.forceStart();
-        player.sendMessage("Forcestart");
+        player.sendMessage("Spiel wurde gestartet.");
         return true;
     }
 }

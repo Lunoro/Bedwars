@@ -26,6 +26,8 @@ public class Team {
         this.name = name;
         this.colorCode = colorCode;
         this.color = ChatColor.getByChar(colorCode);
+        this.spawnLocation = null;
+        this.bedLocation = null;
 
         memberList = new ArrayList<>();
     }
@@ -35,8 +37,7 @@ public class Team {
         this.colorCode = colorCode;
         this.spawnLocation = spawnLocation;
         this.bedLocation = bedLocation;
-        ChatColor color = ChatColor.getByChar(colorCode);
-        this.color = color;
+        this.color = ChatColor.getByChar(colorCode);
 
         memberList = new ArrayList<>();
     }

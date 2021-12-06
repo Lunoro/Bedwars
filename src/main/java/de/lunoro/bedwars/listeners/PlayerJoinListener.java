@@ -14,11 +14,17 @@ import org.bukkit.event.player.PlayerJoinEvent;
 public class PlayerJoinListener implements Listener {
 
     private final Game game;
+    private final boolean isStartedInBuildingMode;
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
+
+        if (isStartedInBuildingMode) {
+            player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
+            return;
+        }
 
         player.setGameMode(GameMode.SURVIVAL);
         if (game.getGamePhase().equals(GamePhase.RUNNING) && team == null) {

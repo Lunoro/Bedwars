@@ -14,15 +14,15 @@ public class ItemSpawner implements IGameObject {
 
     private final Material material;
     private final List<Location> locationList;
-    private final int dropDuration;
+    private final double dropDuration;
 
-    public ItemSpawner(Material material, int dropDuration) {
+    public ItemSpawner(Material material, double dropDuration) {
         this.material = material;
         this.dropDuration = dropDuration;
         locationList = new ArrayList<>();
     }
 
-    public ItemSpawner(String materialName, List<Location> locationList, int dropDuration) {
+    public ItemSpawner(String materialName, List<Location> locationList, double dropDuration) {
         this.material = Material.getMaterial(materialName);
         this.dropDuration = dropDuration;
         this.locationList = locationList;

@@ -4,6 +4,7 @@ import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
+import de.lunoro.bedwars.game.team.TeamContainer;
 import lombok.AllArgsConstructor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -15,10 +16,11 @@ import org.bukkit.entity.Player;
 public class SetLocationCommand implements CommandExecutor {
 
     private final ConfigContainer configContainer;
-    private final Game game;
+    private final TeamContainer teamContainer;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        System.out.println("Fired command");
         if (!(sender instanceof Player)) {
             return false;
         }
@@ -53,16 +55,21 @@ public class SetLocationCommand implements CommandExecutor {
                 break;
         }
 
-        Team team = game.getTeamContainer().getTeamByName(args[0]);
+        System.out.println("Team spawn detected");
+        Team team = teamContainer.getTeamByName(args[0]);
 
         if (team != null) {
             switch (args[1]) {
                 case "spawn":
                     team.setSpawnLocation(player.getLocation());
+                    player.sendMessage("Spawn location für Team " + team.getName() + " wurde gesetzt.");
                     break;
                 case "bed":
                     for (Block block : player.getLineOfSight(null, 10)) {
-                        if (block.getType().name().contains("bed")) {
+                        System.out.println(block.getType().name());
+                        System.out.println(block.getType().name().contains("BED"));
+                        if (block.getType().name().contains("BED")) {
+                            player.sendMessage("Bed location für Team " + team.getName() + " wurde gesetzt.");
                             team.setBedLocation(block.getLocation());
                         }
                     }
@@ -70,7 +77,7 @@ public class SetLocationCommand implements CommandExecutor {
             }
         }
 
-        game.getTeamContainer().save();
+        teamContainer.save();
         locationsFile.save();
         return true;
     }

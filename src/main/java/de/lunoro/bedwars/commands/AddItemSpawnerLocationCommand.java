@@ -1,8 +1,7 @@
 package de.lunoro.bedwars.commands;
 
-import de.lunoro.bedwars.game.Game;
-import de.lunoro.bedwars.game.team.Team;
-import de.lunoro.bedwars.game.team.TeamContainer;
+import de.lunoro.bedwars.game.spawner.ItemSpawner;
+import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
 import lombok.AllArgsConstructor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,9 +9,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor
-public class CreateTeamCommand implements CommandExecutor {
+public class AddItemSpawnerLocationCommand implements CommandExecutor {
 
-    private final TeamContainer teamContainer;
+    private final ItemSpawnerContainer itemSpawnerContainer;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -23,20 +22,26 @@ public class CreateTeamCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission("bedwars.command.createteam")) {
+        if (!player.hasPermission("bedwars.command.setitemspawnerlocation")) {
             player.sendMessage("Dafür hast du keine Berechtigung!");
             return false;
         }
 
         if (args.length != 2) {
             player.sendMessage("Nicht genügend Argumente!");
-            player.sendMessage("Usage: /createTeam [name] [colorCode (&c - red)]");
+            player.sendMessage("Usage: /additemspawnerlocation [material]");
             return false;
         }
 
-        teamContainer.addTeam(new Team(args[0], args[1].charAt(1)));
-        player.sendMessage(args[1].charAt(1) + "");
-        player.sendMessage("Team " + args[0] + " erstellt.");
+        ItemSpawner itemSpawner = itemSpawnerContainer.getItemSpawner(args[0]);
+
+        if (itemSpawner == null) {
+            player.sendMessage("ItemSpawner nicht gefunden.");
+            return false;
+        }
+
+        itemSpawner.getLocationList().add(player.getLocation());
+        player.sendMessage("Neue location wurde hinzugefügt.");
         return true;
     }
 }

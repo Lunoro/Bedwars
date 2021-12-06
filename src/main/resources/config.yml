@@ -5,7 +5,5 @@
 #Game wont start if true.
 startInBuildingMode: true
 
-#Amount of teams.
-
 #Amount of players it will take to start the game.
 playerCountToStart: 2
