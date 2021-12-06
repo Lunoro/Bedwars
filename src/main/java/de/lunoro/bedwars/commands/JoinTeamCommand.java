@@ -36,7 +36,7 @@ public class JoinTeamCommand implements CommandExecutor {
         Team teamToJoin = game.getTeamContainer().getTeamByName(args[0]);
 
         if (teamToJoin == null) {
-            player.sendMessage("Team nicht gefunden!");
+            player.sendMessage("Kein Team mit diesem namen gefunden!");
             return false;
         }
 
