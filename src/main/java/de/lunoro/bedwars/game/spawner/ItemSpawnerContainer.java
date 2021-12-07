@@ -3,50 +3,25 @@ package de.lunoro.bedwars.game.spawner;
 import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ItemSpawnerContainer {
 
     private final List<ItemSpawner> itemSpawnerList;
     private final ConfigContainer configContainer;
+    private final ItemSpawnerLoader itemSpawnerLoader;
 
     public ItemSpawnerContainer(ConfigContainer configContainer) {
         this.configContainer = configContainer;
-        this.itemSpawnerList = loadTeams();
-    }
 
-    private List<ItemSpawner> loadTeams() {
-        List<ItemSpawner> list = new ArrayList<>();
-        FileConfiguration spawnerFileConfig = configContainer.getFile("spawner").getFileConfiguration();
-        for (String key : spawnerFileConfig.getKeys(false)) {
-
-            String materialName = key;
-            List<Location> locationList = (List<Location>) spawnerFileConfig.getConfigurationSection(key).getList("locationList");
-            double dropDuration = spawnerFileConfig.getConfigurationSection(key).getDouble("dropduration");
-
-            ItemSpawner itemSpawner = new ItemSpawner(materialName, locationList, dropDuration);
-            list.add(itemSpawner);
-        }
-        return list;
+        Config spawnerConfig = configContainer.getFile("spawner");
+        this.itemSpawnerLoader = new ItemSpawnerLoader(spawnerConfig);
+        this.itemSpawnerList = itemSpawnerLoader.load();
     }
 
     public void save() {
-        Config spawnerConfig = configContainer.getFile("spawner");
-        spawnerConfig.clear();
-        for (ItemSpawner itemSpawner : itemSpawnerList) {
-            saveInConfigurationSection(itemSpawner, spawnerConfig.getFileConfiguration().createSection(itemSpawner.getMaterial().name()));
-        }
-        spawnerConfig.save();
-    }
-
-    private void saveInConfigurationSection(ItemSpawner itemSpawner, ConfigurationSection configurationSection) {
-        configurationSection.set("locationList", itemSpawner.getLocationList());
-        configurationSection.set("dropduration", itemSpawner.getDropDuration());
+        itemSpawnerLoader.save(itemSpawnerList);
     }
 
     public void add(ItemSpawner itemSpawner) {

@@ -3,53 +3,26 @@ package de.lunoro.bedwars.game.team;
 import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
 import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TeamContainer {
 
     private final List<Team> teamList;
     private final ConfigContainer configContainer;
+    private final TeamLoader teamLoader;
 
     public TeamContainer(ConfigContainer configContainer) {
         this.configContainer = configContainer;
-        this.teamList = loadTeams();
-    }
 
-    private List<Team> loadTeams() {
-        List<Team> list = new ArrayList<>();
-        FileConfiguration teamsFileConfig = configContainer.getFile("teams").getFileConfiguration();
-        for (String key : teamsFileConfig.getKeys(false)) {
-            String name = teamsFileConfig.getConfigurationSection(key).getString("name");
-            char color = teamsFileConfig.getConfigurationSection(key).getString("color").charAt(0);
-            Location spawn = teamsFileConfig.getConfigurationSection(key).getLocation("spawnlocation");
-            Location bedLocation = teamsFileConfig.getConfigurationSection(key).getLocation("bedlocation");
-            Team team = new Team(name, color, spawn, bedLocation);
-            list.add(team);
-        }
-        return list;
+        Config teamsConfig = configContainer.getFile("teams");
+        this.teamLoader = new TeamLoader(teamsConfig);
+        this.teamList = teamLoader.loadTeams();
     }
 
     public void save() {
-        int i = 0;
-        Config teamsConfig = configContainer.getFile("teams");
-        teamsConfig.clear();
-        for (Team team : teamList) {
-            saveInConfigurationSection(team, teamsConfig.getFileConfiguration().createSection(String.valueOf(i)));
-            i++;
-        }
-        teamsConfig.save();
-    }
-
-    private void saveInConfigurationSection(Team team, ConfigurationSection configurationSection) {
-        configurationSection.set("name", team.getName());
-        configurationSection.set("color", team.getColorCode());
-        configurationSection.set("spawnlocation", team.getSpawnLocation());
-        configurationSection.set("bedlocation", team.getBedLocation());
+        teamLoader.save(teamList);
     }
 
     public void addTeam(Team team) {

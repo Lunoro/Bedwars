@@ -7,3 +7,7 @@ startInBuildingMode: true
 
 #Amount of players it will take to start the game.
 playerCountToStart: 2
+
+shopInventory:
+  RED_BED: Bett
+  Blue_BED: Other Bett
