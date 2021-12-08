@@ -1,6 +1,5 @@
 package de.lunoro.bedwars.listeners;
 
-import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
 import lombok.AllArgsConstructor;

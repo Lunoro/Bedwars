@@ -16,6 +16,7 @@ public final class Bedwars extends JavaPlugin {
     @Override
     public void onEnable() {
         saveResource("config.yml", false);
+        saveResource("shopinventory.yml", false);
         init();
         registerEvents();
         registerCommands();
@@ -30,7 +31,8 @@ public final class Bedwars extends JavaPlugin {
     public void onDisable() {
         game.shutdown();
         configContainer.getFile("locations").save();
-        saveDefaultConfig();
+        saveResource("config.yml", false);
+        saveResource("shopinventory.yml", false);
     }
 
     private void registerCommands() {

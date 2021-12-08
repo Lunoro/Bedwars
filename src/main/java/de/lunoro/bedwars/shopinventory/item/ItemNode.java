@@ -12,14 +12,19 @@ import java.util.List;
 public class ItemNode {
 
     private final ItemStack rootItemStack;
-    private final List<ItemStack> childrenList;
+    private final List<String> childrenList;
 
     public ItemNode(Material rootNodeItem, String name) {
         this.rootItemStack = new ItemBuilder(rootNodeItem).setName(name).toItemStack();
         childrenList = new ArrayList<>();
     }
 
+    public ItemNode(Material rootNodeItem, String name, List<String> childrenList) {
+        this.rootItemStack = new ItemBuilder(rootNodeItem).setName(name).toItemStack();
+        this.childrenList = childrenList;
+    }
+
     public void addChildren(Material item, String name) {
-        childrenList.add(new ItemBuilder(item).setName(name).toItemStack());
+        childrenList.add(new ItemBuilder(item).setName(name).toItemStack().getType().name());
     }
 }

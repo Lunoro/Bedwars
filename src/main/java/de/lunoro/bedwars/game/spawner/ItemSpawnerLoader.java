@@ -2,7 +2,6 @@ package de.lunoro.bedwars.game.spawner;
 
 import de.lunoro.bedwars.config.Config;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
