@@ -28,6 +28,5 @@ public class PlayerDeathListener implements Listener {
         team.getTeamMember(player).switchRespawn();
         event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
         game.stopIfGameIsOver();
-        player.spigot().respawn();
     }
 }

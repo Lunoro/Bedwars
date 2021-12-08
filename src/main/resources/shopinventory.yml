@@ -1,4 +1,47 @@
-'0':
-  materialName: RED_BED
-  name: rot
-  children: []
+inventorySize: 18
+
+items:
+    '0':
+        materialName: "SANDSTONE"
+        name: "Blöcke"
+        description: ""
+        priceItem: GOLD_INGOT
+        price: 0
+        inventoryIndex: 0
+        children:
+            '0':
+                materialName: SANDSTONE
+                name: "§d%price% §5%priceItem%"
+                description: ""
+                priceItem: GOLD_INGOT
+                price: -1
+                inventoryIndex: 1
+            '1':
+                materialName: YELLOW_BED
+                name: gelb
+                description: "a yellow bed"
+                priceItem: GOLD_INGOT
+                price: -1
+                inventoryIndex: 2
+    '1':
+        materialName: RED_BED
+        name: rot
+        description: "a red bed"
+        priceItem: GOLD_INGOT
+        price: 0
+        inventoryIndex: 3
+        children:
+            '0':
+                materialName: BLUE_BED
+                name: blau
+                description: "a blue bed again"
+                priceItem: GOLD_INGOT
+                price: -1
+                inventoryIndex: 4
+            '1':
+                materialName: YELLOW_BED
+                name: gelb
+                description: "a yellow bed again"
+                priceItem: GOLD_INGOT
+                price: -1
+                inventoryIndex: 5

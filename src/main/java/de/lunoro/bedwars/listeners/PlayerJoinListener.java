@@ -22,6 +22,7 @@ public class PlayerJoinListener implements Listener {
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (isStartedInBuildingMode) {
+            game.getShopInventory().open(player);
             player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
             return;
         }

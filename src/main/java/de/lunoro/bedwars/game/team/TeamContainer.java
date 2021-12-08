@@ -10,11 +10,9 @@ import java.util.List;
 public class TeamContainer {
 
     private final List<Team> teamList;
-    private final ConfigContainer configContainer;
     private final TeamLoader teamLoader;
 
     public TeamContainer(ConfigContainer configContainer) {
-        this.configContainer = configContainer;
 
         Config teamsConfig = configContainer.getFile("teams");
         this.teamLoader = new TeamLoader(teamsConfig);
@@ -67,6 +65,16 @@ public class TeamContainer {
         }
         return null;
     }
+
+    public Team getTeamByBedLocation(Location location) {
+        for (Team team : teamList) {
+            if (team.getBedLocation() != null) {
+                return team;
+            }
+        }
+        return null;
+    }
+
 
     public Team getTeamByName(String name) {
         System.out.println(teamList);

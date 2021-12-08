@@ -51,6 +51,7 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game, isStartedInBuildingMode), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(game.getTeamContainer()), this);
+        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(game), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
     }
 }

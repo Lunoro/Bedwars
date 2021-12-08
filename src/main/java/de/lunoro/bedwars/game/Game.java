@@ -4,6 +4,7 @@ import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
 import de.lunoro.bedwars.game.timer.GameTimer;
 import de.lunoro.bedwars.game.team.TeamContainer;
+import de.lunoro.bedwars.shopinventory.ShopInventory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,6 +18,8 @@ public class Game {
     private final TeamContainer teamContainer;
     @Getter
     private final ItemSpawnerContainer itemContainer;
+    @Getter
+    private final ShopInventory shopInventory;
     @Getter
     private GamePhase gamePhase;
     @Getter
@@ -34,6 +37,7 @@ public class Game {
         this.plugin = plugin;
         this.teamContainer = new TeamContainer(configContainer);
         this.itemContainer = new ItemSpawnerContainer(configContainer);
+        this.shopInventory = new ShopInventory(configContainer);
 
         gamePhase = GamePhase.START;
         gameTimer = new GameTimer();
@@ -95,13 +99,13 @@ public class Game {
         }
     }
 
+    private boolean gameHasWinner() {
+        return teamContainer.getWinner() != null;
+    }
+
     public void stop() {
         Bukkit.getScheduler().cancelTask(taskId);
         gamePhase = GamePhase.END;
         teamContainer.teleportEachTeam(endLocation);
-    }
-
-    private boolean gameHasWinner() {
-        return teamContainer.getWinner() != null;
     }
 }
