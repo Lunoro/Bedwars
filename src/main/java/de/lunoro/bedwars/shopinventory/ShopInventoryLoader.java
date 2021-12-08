@@ -43,7 +43,6 @@ public class ShopInventoryLoader {
     private List<ItemNode> loadChildren(ConfigurationSection inventoryFileConfig) {
         List<ItemNode> childrenList = new ArrayList<>();
         ConfigurationSection childrenSection = inventoryFileConfig.getConfigurationSection("children");
-        System.out.println(childrenSection.getCurrentPath());
         for (String childrenSectionKey : childrenSection.getKeys(false)) {
             String childrenMaterialName = childrenSection.getConfigurationSection(childrenSectionKey).getString("materialName");
             String childrenName = childrenSection.getConfigurationSection(childrenSectionKey).getString("name");

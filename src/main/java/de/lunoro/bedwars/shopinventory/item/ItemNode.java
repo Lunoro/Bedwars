@@ -14,14 +14,23 @@ public class ItemNode {
     private final List<ItemNode> childrenList;
     private final int index;
     private final int price;
+    private final Material priceMaterial;
 
     public ItemNode(Material material, String name, String description, Material priceMaterial, int price, int index, List<ItemNode> childrenList) {
-        this.item = new ItemBuilder(material)
-                .setName(name.replace("%price%", String.valueOf(price).replace("%priceitem%", String.valueOf(priceMaterial))))
-                .setLore(description.replace("%price%", String.valueOf(price)).replace("%priceitem%", String.valueOf(priceMaterial)))
-                .toItemStack();
+        final String nameString = name.replace("%price%", String.valueOf(price).replace("%priceItem%", name));
+        if (description.equals("")) {
+            this.item = new ItemBuilder(material)
+                    .setName(nameString)
+                    .toItemStack();
+        } else {
+            this.item = new ItemBuilder(material)
+                    .setName(nameString)
+                    .setLore(description.replace("%price%", String.valueOf(price)).replace("%priceItem%", name))
+                    .toItemStack();
+        }
         this.price = price;
         this.index = index;
         this.childrenList = childrenList;
+        this.priceMaterial = priceMaterial;
     }
 }

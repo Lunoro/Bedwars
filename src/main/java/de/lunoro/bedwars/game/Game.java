@@ -2,6 +2,7 @@ package de.lunoro.bedwars.game;
 
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
+import de.lunoro.bedwars.game.team.Team;
 import de.lunoro.bedwars.game.timer.GameTimer;
 import de.lunoro.bedwars.game.team.TeamContainer;
 import de.lunoro.bedwars.shopinventory.ShopInventory;
@@ -10,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 public class Game {
@@ -28,6 +30,7 @@ public class Game {
     private final Location endLocation;
     @Getter
     private final Location spectatorLocation;
+    private final int maxPlayersAmountInATeam;
     private final Plugin plugin;
     private final GameTimer gameTimer;
     private final int playerCountToStart;
@@ -39,13 +42,14 @@ public class Game {
         this.itemContainer = new ItemSpawnerContainer(configContainer);
         this.shopInventory = new ShopInventory(configContainer);
 
-        gamePhase = GamePhase.START;
-        gameTimer = new GameTimer();
+        this.gamePhase = GamePhase.START;
+        this.gameTimer = new GameTimer();
 
-        playerCountToStart = configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart");
-        spawnLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spawn");
-        endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
-        spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
+        this.playerCountToStart = configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart");
+        this.spawnLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spawn");
+        this.endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
+        this.spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
+        this.maxPlayersAmountInATeam = configContainer.getFile("config").getFileConfiguration().getInt("maxPlayersInATeam");
     }
 
     public void start() {
@@ -67,16 +71,15 @@ public class Game {
 
     private void startGame(boolean isForceStart) {
         startGameClock(isForceStart);
-        if (gameTimer.getTimer() == 0) {
-            gamePhase = GamePhase.RUNNING;
-            teamContainer.spawnEachTeam();
-        }
     }
 
     private void startGameClock(boolean isForceStart) {
         taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             if (gameTimer.getTimer() < 0) {
                 printStartTimer(isForceStart, gameTimer.getTimer() * -1);
+            }
+            if (gameTimer.getTimer() == -1) {
+                startGameIfTimerIsExpired();
             }
             gameTimer.update(gameTimer.getTimer());
             itemContainer.updateItemSpawner(gameTimer.getTimer());
@@ -88,8 +91,42 @@ public class Game {
             player.sendTitle(ChatColor.YELLOW + "" + intToPrint, "", 10, 20, 10);
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_SNARE, 1f, 1f);
         });
-        if (!isForceStart && Bukkit.getOnlinePlayers().size() >= playerCountToStart) {
+        if (!isForceStart && !(Bukkit.getOnlinePlayers().size() >= playerCountToStart)) {
             Bukkit.getScheduler().cancelTask(taskId);
+        }
+    }
+
+    private void startGameIfTimerIsExpired() {
+        System.out.println("Start Game");
+        gamePhase = GamePhase.RUNNING;
+        assignATeamToEachPlayerWithoutATeam();
+        teamContainer.spawnEachTeam();
+    }
+
+    private void assignATeamToEachPlayerWithoutATeam() {
+        String hash;
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (teamContainer.isPlayerInTeam(onlinePlayer)) {
+                System.out.println("Player is already in a Team");
+                continue;
+            }
+            for (Team team : teamContainer.getTeamList()) {
+                hash = team.getName();
+                if (team.getNumberOfTeamMember() == maxPlayersAmountInATeam) {
+                    System.out.println("Max player in this team");
+                    continue;
+                }
+                if (team.getNumberOfTeamMember() == 0) {
+                    team.addTeamMember(onlinePlayer);
+                }
+                if (teamContainer.getTeamByName(hash).getNumberOfTeamMember() != team.getNumberOfTeamMember()
+                        && !(teamContainer.getTeamByName(hash).getNumberOfTeamMember() > team.getNumberOfTeamMember())) {
+                    System.out.println("Team weird");
+                    continue;
+                }
+                team.addTeamMember(onlinePlayer);
+                break;
+            }
         }
     }
 

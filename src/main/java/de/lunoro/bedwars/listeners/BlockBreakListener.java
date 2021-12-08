@@ -20,7 +20,5 @@ public class BlockBreakListener implements Listener {
         }
 
         event.setDropItems(false);
-        block.breakNaturally();
-        event.setCancelled(true);
     }
 }

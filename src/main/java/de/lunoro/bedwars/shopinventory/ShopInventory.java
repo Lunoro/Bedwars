@@ -3,6 +3,7 @@ package de.lunoro.bedwars.shopinventory;
 import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.shopinventory.item.ItemNode;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public class ShopInventory {
 
+    @Getter
     private final Inventory inventory;
     private final ShopInventoryLoader shopInventoryLoader;
     private final List<ItemNode> itemNodeList;
@@ -29,14 +31,10 @@ public class ShopInventory {
         }
     }
 
-    public void setChildItemsFromItemNode(ItemNode itemNode) {
+    public void setChildItemsFromItemNode(ItemNode itemNode, Inventory targetInventory) {
         for (ItemNode children : itemNode.getChildrenList()) {
-            inventory.setItem(children.getIndex(), children.getItem());
+            targetInventory.setItem(children.getIndex(), children.getItem());
         }
-    }
-
-    public void open(Player player) {
-        player.openInventory(inventory);
     }
 
     public ItemNode getItemNode(int inventoryIndex) {

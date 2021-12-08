@@ -17,17 +17,17 @@ public class PlayerJoinListener implements Listener {
     private final boolean isStartedInBuildingMode;
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (isStartedInBuildingMode) {
-            game.getShopInventory().open(player);
             player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
             return;
         }
 
-        player.setGameMode(GameMode.SURVIVAL);
+        player.setGameMode(GameMode.SURVIVAL);;
+
         if (game.getGamePhase().equals(GamePhase.RUNNING) && team == null) {
             player.setGameMode(GameMode.SPECTATOR);
             player.teleport(game.getSpectatorLocation());

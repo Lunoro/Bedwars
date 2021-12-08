@@ -36,17 +36,4 @@ public class ItemSpawner implements IGameObject {
             }
         }
     }
-
-    @Override
-    public void render(int gameTick) {
-
-    }
-
-    public void addLocation(Location location) {
-        locationList.add(location);
-    }
-
-    public void removeLocation(Location location) {
-        locationList.remove(location);
-    }
 }

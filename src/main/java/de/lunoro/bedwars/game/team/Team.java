@@ -100,6 +100,10 @@ public class Team {
         return null;
     }
 
+    public int getNumberOfTeamMember() {
+        return memberList.size();
+    }
+
     public void unregisterScoreboardTeam() {
         scoreBoardTeam.unregister();
     }

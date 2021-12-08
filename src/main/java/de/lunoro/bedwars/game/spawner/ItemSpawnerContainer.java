@@ -37,7 +37,7 @@ public class ItemSpawnerContainer {
                 endLocation = location;
             }
         }
-        itemSpawner.removeLocation(endLocation);
+        itemSpawner.getLocationList().remove(endLocation);
     }
 
     public void remove(ItemSpawner itemSpawner) {

@@ -12,8 +12,4 @@ public class GameTimer implements IGameObject {
     public void update(int gameTick) {
         timer++;
     }
-
-    @Override
-    public void render(int gameTick) {
-    }
 }

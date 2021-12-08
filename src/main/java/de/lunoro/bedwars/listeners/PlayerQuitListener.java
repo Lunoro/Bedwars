@@ -16,7 +16,7 @@ public class PlayerQuitListener implements Listener {
     private final TeamContainer teamContainer;
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Team team = teamContainer.getTeamOfPlayer(player);
 
