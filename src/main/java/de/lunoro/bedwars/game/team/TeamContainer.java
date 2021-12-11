@@ -15,7 +15,6 @@ public class TeamContainer {
     private final TeamLoader teamLoader;
 
     public TeamContainer(ConfigContainer configContainer) {
-
         Config teamsConfig = configContainer.getFile("teams");
         this.teamLoader = new TeamLoader(teamsConfig);
         this.teamList = teamLoader.loadTeams();
@@ -34,17 +33,14 @@ public class TeamContainer {
     }
 
     public Team getWinner() {
-        Team winner = null;
         int i = 0;
         for (Team team : teamList) {
-            if (!team.entireTeamIsDead()) {
-                i++;
+            if (!team.entireTeamIsDead() && i == teamList.size() - 1) {
+                return team;
             }
-            if (i == 1) {
-                winner = team;
-            }
+            i++;
         }
-        return winner;
+        return null;
     }
 
     public void spawnEachTeam() {
@@ -59,26 +55,20 @@ public class TeamContainer {
         }
     }
 
-    public boolean isPlayerInTeam(Player player) {
-        return getTeamOfPlayer(player) != null;
-    }
-
     public Team getTeamOfPlayer(Player player) {
         for (Team team : teamList) {
-            if (team.getTeamMember(player) != null) {
+            if (team.playerIsInThisTeam(player)) {
                 return team;
             }
         }
         return null;
     }
 
-    public int getNumberOfTeams() {
-        return teamList.size();
+    public boolean playerHasTeam(Player player) {
+        return getTeamOfPlayer(player) != null;
     }
 
-
     public Team getTeamByName(String name) {
-        System.out.println(teamList);
         for (Team team : teamList) {
             if (team.getName().equals(name)) {
                 return team;

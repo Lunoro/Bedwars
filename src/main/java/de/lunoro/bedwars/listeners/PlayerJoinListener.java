@@ -26,7 +26,11 @@ public class PlayerJoinListener implements Listener {
             return;
         }
 
-        player.setGameMode(GameMode.SURVIVAL);;
+        if (player.isDead()) {
+            player.spigot().respawn();
+        }
+
+        player.setGameMode(GameMode.ADVENTURE);
 
         if (game.getGamePhase().equals(GamePhase.RUNNING) && team == null) {
             player.setGameMode(GameMode.SPECTATOR);

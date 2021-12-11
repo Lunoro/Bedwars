@@ -44,6 +44,7 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginCommand("removeitemspawnerlocation").setExecutor(new RemoveItemSpawnerLocationCommand(game.getItemContainer()));
         Bukkit.getPluginCommand("removeteam").setExecutor(new RemoveTeamCommand(game.getTeamContainer()));
         Bukkit.getPluginCommand("jointeam").setExecutor(new JoinTeamCommand(game));
+        Bukkit.getPluginCommand("respawnPlayer").setExecutor(new RespawnPlayer());
     }
 
     private void registerEvents() {
@@ -51,7 +52,7 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game, isStartedInBuildingMode), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(game.getTeamContainer()), this);
-        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(game), this);
+        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(game.getShopInventory()), this);
         Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(game, isStartedInBuildingMode), this);

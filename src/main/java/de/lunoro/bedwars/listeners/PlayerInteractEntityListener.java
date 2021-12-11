@@ -1,7 +1,9 @@
 package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
+import de.lunoro.bedwars.game.GamePhase;
 import lombok.AllArgsConstructor;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,9 +20,13 @@ public class PlayerInteractEntityListener implements Listener {
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
-        //if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
-        //    return;
-        //}
+        if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
+            return;
+        }
+
+        if (event.getRightClicked().getType().equals(EntityType.PLAYER)) {
+            return;
+        }
 
         Inventory inventory = game.getShopInventory().getInventory();
         player.openInventory(inventory);

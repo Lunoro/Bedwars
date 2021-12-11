@@ -81,14 +81,20 @@ public class Team {
     }
 
     public void addTeamMember(Player player) {
-        player.setDisplayName(color + player.getName() + "");
-        scoreBoardTeam.addEntry(player.getName());
-        memberList.add(new TeamMember(player));
+        if(!playerIsInThisTeam(player)) {
+            player.setDisplayName(color + player.getName() + "");
+            scoreBoardTeam.addEntry(player.getName());
+            memberList.add(new TeamMember(player));
+        }
     }
 
     public void removeTeamMember(Player player) {
         player.setDisplayName(ChatColor.WHITE + player.getName());
         memberList.remove(getTeamMember(player));
+    }
+
+    public boolean playerIsInThisTeam(Player player) {
+        return getTeamMember(player) != null;
     }
 
     public TeamMember getTeamMember(Player player) {

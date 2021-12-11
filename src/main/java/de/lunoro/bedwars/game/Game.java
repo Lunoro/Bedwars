@@ -29,10 +29,11 @@ public class Game {
     @Getter
     private final Location endLocation;
     @Getter
+    private final boolean stopServerIfGameIsOver;
     private final Location spectatorLocation;
-    private final int maxPlayersAmountInATeam;
     private final Plugin plugin;
     private final GameTimer gameTimer;
+    private final int maxPlayersAmountInATeam;
     private final int playerCountToStart;
     private int taskId;
 
@@ -50,6 +51,7 @@ public class Game {
         this.endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
         this.spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
         this.maxPlayersAmountInATeam = configContainer.getFile("config").getFileConfiguration().getInt("maxPlayersInATeam");
+        this.stopServerIfGameIsOver = configContainer.getFile("config").getFileConfiguration().getBoolean("stopServerIfGameIsOver");
     }
 
     public void start() {
@@ -62,11 +64,30 @@ public class Game {
         startGame(true);
     }
 
+    public void stop() {
+        Bukkit.getScheduler().cancelTask(taskId);
+        respawnAllPlayer();
+        gamePhase = GamePhase.END;
+        teamContainer.teleportEachTeam(endLocation);
+        if (stopServerIfGameIsOver) {
+            Bukkit.broadcastMessage("The server will shutdown in 30 seconds.");
+            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().shutdown(), 30 * 20);
+        }
+    }
+
+    private void respawnAllPlayer() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.isDead()) {
+                player.spigot().respawn();
+            }
+        }
+    }
+
     public void shutdown() {
         stop();
         itemContainer.save();
-        teamContainer.save();
         teamContainer.unregisterAllScoreboardTeams();
+        teamContainer.save();
     }
 
     private void startGame(boolean isForceStart) {
@@ -104,45 +125,32 @@ public class Game {
     }
 
     private void assignATeamToEachPlayerWithoutATeam() {
-        String hash;
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            if (teamContainer.isPlayerInTeam(onlinePlayer)) {
-                System.out.println("Player is already in a Team");
-                continue;
-            }
+        String hash = "";
+        for (Player player : Bukkit.getOnlinePlayers()) {
             for (Team team : teamContainer.getTeamList()) {
-                hash = team.getName();
                 if (team.getNumberOfTeamMember() == maxPlayersAmountInATeam) {
-                    System.out.println("Max player in this team");
                     continue;
                 }
-                if (team.getNumberOfTeamMember() == 0) {
-                    team.addTeamMember(onlinePlayer);
+                if (teamContainer.playerHasTeam(player)) {
+                    System.out.println("Has " + player.getName() + " + team: " + teamContainer.playerHasTeam(player));
+                    break;
                 }
-                if (teamContainer.getTeamByName(hash).getNumberOfTeamMember() != team.getNumberOfTeamMember()
-                        && !(teamContainer.getTeamByName(hash).getNumberOfTeamMember() > team.getNumberOfTeamMember())) {
-                    System.out.println("Team weird");
+                if (hash.equals(team.getName())) {
+                    System.out.println("Is " + hash + " team: " + hash.equals(team.getName()) + " (" + team.getName() + ")");
                     continue;
                 }
-                team.addTeamMember(onlinePlayer);
+                if (team.playerIsInThisTeam(player)) {
+                    System.out.println("Is " + player.getName() + " in this team: " + team.playerIsInThisTeam(player));
+                    break;
+                }
+                hash = team.getName();
+                team.addTeamMember(player);
                 break;
             }
         }
     }
 
-    public void stopIfGameIsOver() {
-        if (gameHasWinner()) {
-            stop();
-        }
-    }
-
-    private boolean gameHasWinner() {
+    public boolean gameHasWinner() {
         return teamContainer.getWinner() != null;
-    }
-
-    public void stop() {
-        Bukkit.getScheduler().cancelTask(taskId);
-        gamePhase = GamePhase.END;
-        teamContainer.teleportEachTeam(endLocation);
     }
 }

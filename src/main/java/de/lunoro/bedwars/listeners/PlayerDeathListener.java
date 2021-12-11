@@ -1,8 +1,10 @@
 package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
+import de.lunoro.bedwars.game.GamePhase;
 import de.lunoro.bedwars.game.team.Team;
 import lombok.AllArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,18 +17,26 @@ public class PlayerDeathListener implements Listener {
     private final Game game;
 
     @EventHandler
-    public void onPlayerKill(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getEntity().getPlayer();
         Player killer = event.getEntity().getKiller();
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
-        if (player.equals(killer) || killer != null) {
-            event.setDeathMessage(ChatColor.RED + killer.getDisplayName() + ChatColor.GRAY + " -> " + ChatColor.WHITE + player.getDisplayName());
+        if (!game.getGamePhase().equals(GamePhase.RUNNING)) {
+            return;
+        }
+
+        if (killer == null) {
+            event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
             return;
         }
 
         team.getTeamMember(player).switchRespawn();
-        event.setDeathMessage(ChatColor.RED + "☠ " + ChatColor.WHITE + player.getDisplayName());
-        game.stopIfGameIsOver();
+        event.setDeathMessage(ChatColor.RED + killer.getDisplayName() + ChatColor.GRAY + " -> " + ChatColor.WHITE + player.getDisplayName());
+
+        if (game.gameHasWinner()) {
+            Bukkit.broadcastMessage("Team: " + game.getTeamContainer().getWinner().getName() + " has won.");
+            game.stop();
+        }
     }
 }
