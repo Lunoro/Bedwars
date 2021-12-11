@@ -1,5 +1,6 @@
 package de.lunoro.bedwars.listeners;
 
+import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.GamePhase;
 import de.lunoro.bedwars.game.team.Team;
@@ -33,9 +34,10 @@ public class PlayerDeathListener implements Listener {
 
         team.getTeamMember(player).switchRespawn();
         event.setDeathMessage(ChatColor.RED + killer.getDisplayName() + ChatColor.GRAY + " -> " + ChatColor.WHITE + player.getDisplayName());
+        game.getTeamContainer().updateStatusOfAllTeams();
 
-        if (game.gameHasWinner()) {
-            Bukkit.broadcastMessage("Team: " + game.getTeamContainer().getWinner().getName() + " has won.");
+        if (game.getTeamContainer().getTeamsAlive() == 1) {
+            Bukkit.broadcastMessage(game.getTeamContainer().getWinnerTeam().getName() + " has won.");
             game.stop();
         }
     }

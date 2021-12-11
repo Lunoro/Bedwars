@@ -22,12 +22,12 @@ public class AddItemSpawnerLocationCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.setitemspawnerlocation")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length != 2) {
-            player.sendMessage("Nicht genügend Argumente!");
+            player.sendMessage("Not enough arguments!");
             player.sendMessage("Usage: /additemspawnerlocation [material]");
             return false;
         }
@@ -35,12 +35,12 @@ public class AddItemSpawnerLocationCommand implements CommandExecutor {
         ItemSpawner itemSpawner = itemSpawnerContainer.getItemSpawner(args[0]);
 
         if (itemSpawner == null) {
-            player.sendMessage("ItemSpawner nicht gefunden.");
+            player.sendMessage("ItemSpawner not found.");
             return false;
         }
 
         itemSpawner.getLocationList().add(player.getLocation());
-        player.sendMessage("Neue location wurde hinzugefügt.");
+        player.sendMessage("Added location.");
         return true;
     }
 }

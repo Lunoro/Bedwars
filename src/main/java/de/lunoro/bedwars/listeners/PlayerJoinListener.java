@@ -19,7 +19,6 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (isStartedInBuildingMode) {
             player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
@@ -31,8 +30,9 @@ public class PlayerJoinListener implements Listener {
         }
 
         player.setGameMode(GameMode.ADVENTURE);
+        player.teleport(game.getSpawnLocation());
 
-        if (game.getGamePhase().equals(GamePhase.RUNNING) && team == null) {
+        if (game.getGamePhase().equals(GamePhase.RUNNING) && !game.getTeamContainer().getTeamOfPlayer(player).getTeamMember(player).isRespawnable()) {
             player.setGameMode(GameMode.SPECTATOR);
             player.teleport(game.getSpectatorLocation());
             return;

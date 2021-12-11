@@ -5,7 +5,7 @@ import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
 import de.lunoro.bedwars.game.team.Team;
 import de.lunoro.bedwars.game.timer.GameTimer;
 import de.lunoro.bedwars.game.team.TeamContainer;
-import de.lunoro.bedwars.shopinventory.ShopInventory;
+import de.lunoro.bedwars.shopinventory.ShopInventoryRegistry;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,6 +14,8 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.Collections;
+
 public class Game {
 
     @Getter
@@ -21,7 +23,7 @@ public class Game {
     @Getter
     private final ItemSpawnerContainer itemContainer;
     @Getter
-    private final ShopInventory shopInventory;
+    private final ShopInventoryRegistry shopInventoryRegistry;
     @Getter
     private GamePhase gamePhase;
     @Getter
@@ -29,8 +31,8 @@ public class Game {
     @Getter
     private final Location endLocation;
     @Getter
-    private final boolean stopServerIfGameIsOver;
     private final Location spectatorLocation;
+    private final boolean stopServerIfGameIsOver;
     private final Plugin plugin;
     private final GameTimer gameTimer;
     private final int maxPlayersAmountInATeam;
@@ -41,7 +43,7 @@ public class Game {
         this.plugin = plugin;
         this.teamContainer = new TeamContainer(configContainer);
         this.itemContainer = new ItemSpawnerContainer(configContainer);
-        this.shopInventory = new ShopInventory(configContainer);
+        this.shopInventoryRegistry = new ShopInventoryRegistry(configContainer);
 
         this.gamePhase = GamePhase.START;
         this.gameTimer = new GameTimer();
@@ -120,37 +122,27 @@ public class Game {
     private void startGameIfTimerIsExpired() {
         System.out.println("Start Game");
         gamePhase = GamePhase.RUNNING;
-        assignATeamToEachPlayerWithoutATeam();
+        assignATeamToEachTeamlessPlayer();
         teamContainer.spawnEachTeam();
     }
 
-    private void assignATeamToEachPlayerWithoutATeam() {
-        String hash = "";
+    private void assignATeamToEachTeamlessPlayer() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-            for (Team team : teamContainer.getTeamList()) {
-                if (team.getNumberOfTeamMember() == maxPlayersAmountInATeam) {
-                    continue;
-                }
-                if (teamContainer.playerHasTeam(player)) {
-                    System.out.println("Has " + player.getName() + " + team: " + teamContainer.playerHasTeam(player));
-                    break;
-                }
-                if (hash.equals(team.getName())) {
-                    System.out.println("Is " + hash + " team: " + hash.equals(team.getName()) + " (" + team.getName() + ")");
-                    continue;
-                }
-                if (team.playerIsInThisTeam(player)) {
-                    System.out.println("Is " + player.getName() + " in this team: " + team.playerIsInThisTeam(player));
-                    break;
-                }
-                hash = team.getName();
-                team.addTeamMember(player);
-                break;
-            }
+            addTeamlessPlayerToATeam(player);
         }
     }
 
-    public boolean gameHasWinner() {
-        return teamContainer.getWinner() != null;
+    public void addTeamlessPlayerToATeam(Player player) {
+        for (Team team : teamContainer.getTeamList()) {
+            Collections.shuffle(teamContainer.getTeamList());
+            if (team.getTeamSize() == maxPlayersAmountInATeam) {
+                continue;
+            }
+            if (teamContainer.playerHasTeam(player)) {
+                break;
+            }
+            team.addTeamMember(player);
+            break;
+        }
     }
 }

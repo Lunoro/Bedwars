@@ -24,6 +24,8 @@ public class Team {
     private Location spawnLocation;
     @Setter
     private Location bedLocation;
+    @Getter
+    private boolean isEliminated;
 
     public Team(String name, char colorCode) {
         this.name = name;
@@ -67,30 +69,8 @@ public class Team {
         }
     }
 
-    public boolean entireTeamIsDead() {
-        for (TeamMember teamMember : memberList) {
-            if (teamMember.isRespawnable()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public boolean hasBed() {
         return bedLocation.getBlock().getType().name().contains("BED");
-    }
-
-    public void addTeamMember(Player player) {
-        if(!playerIsInThisTeam(player)) {
-            player.setDisplayName(color + player.getName() + "");
-            scoreBoardTeam.addEntry(player.getName());
-            memberList.add(new TeamMember(player));
-        }
-    }
-
-    public void removeTeamMember(Player player) {
-        player.setDisplayName(ChatColor.WHITE + player.getName());
-        memberList.remove(getTeamMember(player));
     }
 
     public boolean playerIsInThisTeam(Player player) {
@@ -106,7 +86,29 @@ public class Team {
         return null;
     }
 
-    public int getNumberOfTeamMember() {
+    public void addTeamMember(Player player) {
+        if (!playerIsInThisTeam(player)) {
+            player.setDisplayName(color + player.getName() + "");
+            scoreBoardTeam.addEntry(player.getName());
+            memberList.add(new TeamMember(player));
+        }
+    }
+
+    public void removeTeamMember(Player player) {
+        player.setDisplayName(ChatColor.WHITE + player.getName());
+        memberList.remove(getTeamMember(player));
+    }
+
+    public void updateTeamStatus() {
+        for (TeamMember teamMember : memberList) {
+            if (teamMember.isRespawnable()) {
+                return;
+            }
+        }
+        isEliminated = true;
+    }
+
+    public int getTeamSize() {
         return memberList.size();
     }
 

@@ -23,19 +23,19 @@ public class CreateTeamCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.createteam")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length != 2) {
-            player.sendMessage("Nicht genügend Argumente!");
+            player.sendMessage("Not enough arguments!");
             player.sendMessage("Usage: /createTeam [name] [colorCode (&c - red)]");
             return false;
         }
 
         teamContainer.addTeam(new Team(args[0], args[1].charAt(1)));
         player.sendMessage(args[1].charAt(1) + "");
-        player.sendMessage("Team " + args[0] + " erstellt.");
+        player.sendMessage("Team " + args[0] + " created.");
         return true;
     }
 }

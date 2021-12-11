@@ -17,29 +17,29 @@ public class ForceStartCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("Du bist kein Spieler!");
+            sender.sendMessage("You're not a player!");
             return false;
         }
 
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.forcestart")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (!game.getGamePhase().equals(GamePhase.START)) {
-            player.sendMessage("Das kann jetzt nicht benutzt werden!");
+            player.sendMessage("You can't use that now!");
             return false;
         }
 
         if (isStartedInBuildingMode) {
-            player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
+            player.sendMessage("The server is in building mode so no game will be started.");
             return false;
         }
 
         game.forceStart();
-        player.sendMessage("Spiel wurde gestartet.");
+        player.sendMessage("Game was started.");
         return true;
     }
 }

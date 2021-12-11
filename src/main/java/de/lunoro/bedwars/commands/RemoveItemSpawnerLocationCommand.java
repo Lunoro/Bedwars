@@ -23,12 +23,12 @@ public class RemoveItemSpawnerLocationCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.removeitemspawnerlocation")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length != 1) {
-            player.sendMessage("Nicht genügend Argumente!");
+            player.sendMessage("Not enough arguments!");
             player.sendMessage("Usage: /removeItemSpawnerLocation [material]");
             return false;
         }
@@ -36,19 +36,19 @@ public class RemoveItemSpawnerLocationCommand implements CommandExecutor {
         Material material = Material.getMaterial(args[0]);
 
         if (material == null) {
-            player.sendMessage("Item nicht gefunden!");
+            player.sendMessage("Item not found!");
             return false;
         }
 
         ItemSpawner itemSpawner = itemSpawnerContainer.getItemSpawner(material.name());
 
         if (itemSpawner == null) {
-            player.sendMessage("Keinen ItemSpawner mit diesem item gefunden!");
+            player.sendMessage("No itemspawner found with this item!");
             return false;
         }
 
         itemSpawnerContainer.removeNearestItemSpawnerLocation(itemSpawner, player.getLocation());
-        player.sendMessage("ItemSpawner wurde entfernt.");
+        player.sendMessage("ItemSpawner was removed.");
         return true;
     }
 }

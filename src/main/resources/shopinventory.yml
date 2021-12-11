@@ -12,16 +12,16 @@ items:
             '0':
                 materialName: SANDSTONE
                 name: "§d%price% §5%priceItem%"
-                description: ""
+                description: "Sussy sandstone §d%price% §5%priceItem%"
                 priceItem: GOLD_INGOT
-                price: -1
+                price: 5
                 inventoryIndex: 1
             '1':
                 materialName: YELLOW_BED
                 name: gelb
                 description: "a yellow bed"
                 priceItem: GOLD_INGOT
-                price: -1
+                price: 5
                 inventoryIndex: 2
     '1':
         materialName: RED_BED
@@ -36,12 +36,12 @@ items:
                 name: blau
                 description: "a blue bed again"
                 priceItem: GOLD_INGOT
-                price: -1
+                price: 5
                 inventoryIndex: 4
             '1':
                 materialName: YELLOW_BED
                 name: gelb
                 description: "a yellow bed again"
                 priceItem: GOLD_INGOT
-                price: -1
+                price: 5
                 inventoryIndex: 5

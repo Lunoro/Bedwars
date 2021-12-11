@@ -21,6 +21,7 @@ public class PlayerRespawnListener implements Listener {
         Team team = game.getTeamContainer().getTeamOfPlayer(player);
 
         if (game.getGamePhase().equals(GamePhase.START)) {
+            player.setBedSpawnLocation(team.getSpawnLocation(), true);
             return;
         }
 

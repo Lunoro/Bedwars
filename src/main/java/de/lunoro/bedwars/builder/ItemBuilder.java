@@ -148,9 +148,12 @@ public class ItemBuilder {
      * @param lore The lore to set it to.
      */
     public ItemBuilder setLore(String... lore) {
-        ItemMeta im = is.getItemMeta();
-        im.setLore(Arrays.asList(lore));
-        is.setItemMeta(im);
+        String loreString = String.join(",", lore);
+        if (!loreString.equals("")) {
+            ItemMeta im = is.getItemMeta();
+            im.setLore(Arrays.asList(lore));
+            is.setItemMeta(im);
+        }
         return this;
     }
 

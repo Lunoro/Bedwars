@@ -22,12 +22,12 @@ public class RemoveTeamCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.removeteam")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length != 1) {
-            player.sendMessage("Nicht genügend Argumente!");
+            player.sendMessage("Not enough arguments!");
             player.sendMessage("Usage: /removeTeam [name]");
             return false;
         }
@@ -35,7 +35,7 @@ public class RemoveTeamCommand implements CommandExecutor {
         Team team = teamContainer.getTeamByName(args[0]);
 
         if (team == null) {
-            player.sendMessage("Kein Team mit diesem namen gefunden!");
+            player.sendMessage("No team found with this name!");
             return false;
         }
 

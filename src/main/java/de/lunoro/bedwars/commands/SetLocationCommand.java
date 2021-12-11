@@ -27,13 +27,13 @@ public class SetLocationCommand implements CommandExecutor {
         Config locationsFile = configContainer.getFile("locations");
 
         if (!player.hasPermission("bedwars.command.setlocation")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length == 0) {
-            player.sendMessage("Nicht genügend Argumente!");
-            player.sendMessage("Usage: /setlocation [spawn, end, spectator, [name of team]] [(spawn, bed)]");
+            player.sendMessage("Not enough arguments!");
+            player.sendMessage("Usage: /setlocation [spawn, end, spectator]");
             player.sendMessage("Usage: /setlocation [name of team] [spawn, bed]");
             return false;
         }
@@ -41,15 +41,15 @@ public class SetLocationCommand implements CommandExecutor {
         switch (args[0]) {
             case "spawn":
                 locationsFile.getFileConfiguration().set("spawn", player.getLocation());
-                player.sendMessage("Spawn Location gesetzt.");
+                player.sendMessage("Spawn Location was set.");
                 break;
             case "end":
                 locationsFile.getFileConfiguration().set("end", player.getLocation());
-                player.sendMessage("End Location gesetzt.");
+                player.sendMessage("End Location was set.");
                 break;
             case "spectator":
                 locationsFile.getFileConfiguration().set("spectator", player.getLocation());
-                player.sendMessage("Spectator Location gesetzt.");
+                player.sendMessage("Spectator Location was set.");
                 break;
         }
 
@@ -59,12 +59,12 @@ public class SetLocationCommand implements CommandExecutor {
             switch (args[1]) {
                 case "spawn":
                     team.setSpawnLocation(player.getLocation());
-                    player.sendMessage("Spawn location für Team " + team.getName() + " wurde gesetzt.");
+                    player.sendMessage("Spawn location for team + " + team.getName() + " + was set.");
                     break;
                 case "bed":
                     for (Block block : player.getLineOfSight(null, 10)) {
                         if (block.getType().name().contains("BED")) {
-                            player.sendMessage("Bett location für Team " + team.getName() + " wurde gesetzt.");
+                            player.sendMessage("Bed location for team + " + team.getName() + " + was set.");
                             team.setBedLocation(block.getLocation());
                         }
                     }

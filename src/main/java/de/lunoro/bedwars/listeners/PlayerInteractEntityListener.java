@@ -2,6 +2,7 @@ package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.GamePhase;
+import de.lunoro.bedwars.shopinventory.ShopInventory;
 import lombok.AllArgsConstructor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -20,15 +21,16 @@ public class PlayerInteractEntityListener implements Listener {
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
-        if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
-            return;
-        }
+        //if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
+        //    return;
+        //}
 
         if (event.getRightClicked().getType().equals(EntityType.PLAYER)) {
             return;
         }
 
-        Inventory inventory = game.getShopInventory().getInventory();
+        ShopInventory shopInventory = game.getShopInventoryRegistry().getInventory(player);
+        Inventory inventory = shopInventory.getInventory();
         player.openInventory(inventory);
         event.setCancelled(true);
     }

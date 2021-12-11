@@ -12,12 +12,15 @@ public class TeamContainer {
 
     @Getter
     private final List<Team> teamList;
+    @Getter
+    private int teamsAlive;
     private final TeamLoader teamLoader;
 
     public TeamContainer(ConfigContainer configContainer) {
         Config teamsConfig = configContainer.getFile("teams");
         this.teamLoader = new TeamLoader(teamsConfig);
         this.teamList = teamLoader.loadTeams();
+        this.teamsAlive = teamList.size();
     }
 
     public void save() {
@@ -32,13 +35,25 @@ public class TeamContainer {
         teamList.add(team);
     }
 
-    public Team getWinner() {
+    public void updateStatusOfAllTeams() {
         int i = 0;
         for (Team team : teamList) {
-            if (!team.entireTeamIsDead() && i == teamList.size() - 1) {
+            team.updateTeamStatus();
+            if (team.isEliminated()) {
+                i++;
+            }
+        }
+        teamsAlive = teamList.size() - i;
+    }
+
+    public Team getWinnerTeam() {
+        if (teamsAlive != 1) {
+            return null;
+        }
+        for (Team team : teamList) {
+            if (!team.isEliminated()) {
                 return team;
             }
-            i++;
         }
         return null;
     }
@@ -64,10 +79,6 @@ public class TeamContainer {
         return null;
     }
 
-    public boolean playerHasTeam(Player player) {
-        return getTeamOfPlayer(player) != null;
-    }
-
     public Team getTeamByName(String name) {
         for (Team team : teamList) {
             if (team.getName().equals(name)) {
@@ -81,5 +92,9 @@ public class TeamContainer {
         for (Team team : teamList) {
             team.unregisterScoreboardTeam();
         }
+    }
+
+    public boolean playerHasTeam(Player player) {
+        return getTeamOfPlayer(player) != null;
     }
 }

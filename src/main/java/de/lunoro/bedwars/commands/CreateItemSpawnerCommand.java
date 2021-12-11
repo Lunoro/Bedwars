@@ -23,18 +23,18 @@ public class CreateItemSpawnerCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         if (!player.hasPermission("bedwars.command.createitemspawner")) {
-            player.sendMessage("Dafür hast du keine Berechtigung!");
+            player.sendMessage("No permission!");
             return false;
         }
 
         if (args.length != 2) {
-            player.sendMessage("Nicht genügend Argumente!");
+            player.sendMessage("Not enough arguments!");
             player.sendMessage("Usage: /createItemSpawner [material] [dropDuration]");
             return false;
         }
 
         if (!isNumeric(args[1])) {
-            player.sendMessage("Das ist keine Zahl!");
+            player.sendMessage("not numeric!");
             return false;
         }
 
@@ -42,13 +42,13 @@ public class CreateItemSpawnerCommand implements CommandExecutor {
         double dropDuration = Integer.parseInt(args[1]);
 
         if (material == null) {
-            player.sendMessage("Item nicht gefunden!");
+            player.sendMessage("Item not found!");
             return false;
         }
 
         ItemSpawner itemSpawner = new ItemSpawner(material, dropDuration);
         itemSpawnerContainer.add(itemSpawner);
-        player.sendMessage("ItemSpawner erstellt.");
+        player.sendMessage("ItemSpawner created.");
         return true;
     }
 

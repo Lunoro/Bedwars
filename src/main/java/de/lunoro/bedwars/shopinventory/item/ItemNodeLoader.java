@@ -1,4 +1,4 @@
-package de.lunoro.bedwars.shopinventory;
+package de.lunoro.bedwars.shopinventory.item;
 
 import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.shopinventory.item.ItemNode;
@@ -7,13 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-public class ShopInventoryLoader {
+public class ItemNodeLoader {
 
     private final Config shopInventoryConfig;
 
@@ -23,6 +22,8 @@ public class ShopInventoryLoader {
         for (String key : inventoryFileConfig.getKeys(false)) {
             String materialName = inventoryFileConfig.getConfigurationSection(key).getString("materialName");
             String name = inventoryFileConfig.getConfigurationSection(key).getString("name");
+            String enchantment = inventoryFileConfig.getConfigurationSection(key).getString("enchantment");
+            int enchantmentLevel = inventoryFileConfig.getConfigurationSection(key).getInt("enchantmentLevel");
             String description = inventoryFileConfig.getConfigurationSection(key).getString("description");
             String priceItemName = inventoryFileConfig.getConfigurationSection(key).getString("priceItem");
             int price = inventoryFileConfig.getConfigurationSection(key).getInt("price");
@@ -34,7 +35,9 @@ public class ShopInventoryLoader {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Inventory Config konnte nicht geladen werden.");
                 return null;
             }
-            ItemNode itemNode = new ItemNode(parentMaterial, name, description, priceItem, price, inventoryIndex, childrenList);
+            ItemNode itemNode = new ItemNode(parentMaterial, name, priceItem, price, inventoryIndex, childrenList);
+            itemNode.addEnchantment(enchantment, enchantmentLevel);
+            itemNode.addLore(description);
             itemNodeList.add(itemNode);
         }
         return itemNodeList;
@@ -46,6 +49,8 @@ public class ShopInventoryLoader {
         for (String childrenSectionKey : childrenSection.getKeys(false)) {
             String childrenMaterialName = childrenSection.getConfigurationSection(childrenSectionKey).getString("materialName");
             String childrenName = childrenSection.getConfigurationSection(childrenSectionKey).getString("name");
+            String childrenEnchantment = childrenSection.getConfigurationSection(childrenSectionKey).getString("enchantment");
+            int childrenEnchantmentLevel = childrenSection.getConfigurationSection(childrenSectionKey).getInt("enchantmentLevel");
             String childrenDescription = childrenSection.getConfigurationSection(childrenSectionKey).getString("description");
             int childrenIndex = childrenSection.getConfigurationSection(childrenSectionKey).getInt("inventoryIndex");
             String childrenPriceItemName = childrenSection.getConfigurationSection(childrenSectionKey).getString("priceItem");
@@ -55,7 +60,9 @@ public class ShopInventoryLoader {
             if (childrenMaterial == null || childrenPriceItem == null) {
                 continue;
             }
-            ItemNode itemNode = new ItemNode(childrenMaterial, childrenName, childrenDescription, childrenPriceItem, childrenPrice, childrenIndex, new ArrayList<>());
+            ItemNode itemNode = new ItemNode(childrenMaterial, childrenName, childrenPriceItem, childrenPrice, childrenIndex, new ArrayList<>());
+            itemNode.addEnchantment(childrenEnchantment, childrenEnchantmentLevel);
+            itemNode.addLore(childrenDescription);
             childrenList.add(itemNode);
         }
         return childrenList;
