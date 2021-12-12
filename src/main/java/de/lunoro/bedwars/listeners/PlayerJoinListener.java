@@ -2,7 +2,6 @@ package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.GamePhase;
-import de.lunoro.bedwars.game.team.Team;
 import lombok.AllArgsConstructor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -21,7 +20,7 @@ public class PlayerJoinListener implements Listener {
         Player player = event.getPlayer();
 
         if (isStartedInBuildingMode) {
-            player.sendMessage("Der Server befindet sich im Baumodus es wird also kein Spiel gestartet werden.");
+            player.sendMessage("The server is in building mode so no game will be started.");
             return;
         }
 
@@ -32,7 +31,7 @@ public class PlayerJoinListener implements Listener {
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(game.getSpawnLocation());
 
-        if (game.getGamePhase().equals(GamePhase.RUNNING) && !game.getTeamContainer().getTeamOfPlayer(player).getTeamMember(player).isRespawnable()) {
+        if (game.getGamePhase().equals(GamePhase.RUNNING)) {
             player.setGameMode(GameMode.SPECTATOR);
             player.teleport(game.getSpectatorLocation());
             return;

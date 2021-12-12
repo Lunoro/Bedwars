@@ -40,6 +40,11 @@ public class JoinTeamCommand implements CommandExecutor {
             return false;
         }
 
+        if (teamToJoin.getTeamSize() == game.getMaxPlayersAmountInATeam()) {
+            player.sendMessage("This team is full.");
+            return false;
+        }
+
         if (teamToJoin.getTeamMember(player) != null) {
             player.sendMessage("You're already in this team.");
             return false;

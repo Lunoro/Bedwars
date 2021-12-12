@@ -5,6 +5,7 @@ import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.listeners.*;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
@@ -12,6 +13,7 @@ public final class Bedwars extends JavaPlugin {
     private Game game;
     private ConfigContainer configContainer;
     private boolean isStartedInBuildingMode;
+    private WorldCreator worldCreator;
 
     @Override
     public void onEnable() {
@@ -51,10 +53,11 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new PlayerRespawnListener(game), this);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinListener(game, isStartedInBuildingMode), this);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitListener(game), this);
-        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerBedEnterListener(), this);
+        Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(game, isStartedInBuildingMode), this);
+        Bukkit.getPluginManager().registerEvents(new BlockBreakListener(game.getTeamContainer()), this);
         Bukkit.getPluginManager().registerEvents(new FoodLevelChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryClickListener(game), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerInteractEntityListener(game, isStartedInBuildingMode), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(), this);
         Bukkit.getPluginManager().registerEvents(new SpawnEntityListener(), this);
         Bukkit.getPluginManager().registerEvents(new InventoryCloseListener(game.getShopInventoryRegistry()), this);

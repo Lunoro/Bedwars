@@ -94,6 +94,22 @@ public class TeamContainer {
         }
     }
 
+    public boolean isTeamWithLowestTeamSize(Team team) {
+        return getTeamWithLowestTeamSize().getTeamSize() == team.getTeamSize();
+    }
+
+    private Team getTeamWithLowestTeamSize() {
+        Team teamWithLowestSize = teamList.get(0);
+        for (Team team : teamList) {
+            if (team.getTeamSize() < teamWithLowestSize.getTeamSize()) {
+                teamWithLowestSize = team;
+                System.out.println("Team with lowest amount has changed to: " + teamWithLowestSize.getName());
+            }
+        }
+        System.out.println("Team with lowest amount of teamMembers is: " + teamWithLowestSize.getName());
+        return teamWithLowestSize;
+    }
+
     public boolean playerHasTeam(Player player) {
         return getTeamOfPlayer(player) != null;
     }

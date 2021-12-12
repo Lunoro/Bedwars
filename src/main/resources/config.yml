@@ -5,7 +5,9 @@
 #Game wont start if true.
 startInBuildingMode: true
 
-stopServerIfGameIsOver: false
+stopServerIfGameIsOver: true
+
+worldName: "world"
 
 maxPlayersInATeam: 2
 

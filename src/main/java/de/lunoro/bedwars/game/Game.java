@@ -7,10 +7,7 @@ import de.lunoro.bedwars.game.timer.GameTimer;
 import de.lunoro.bedwars.game.team.TeamContainer;
 import de.lunoro.bedwars.shopinventory.ShopInventoryRegistry;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -32,10 +29,11 @@ public class Game {
     private final Location endLocation;
     @Getter
     private final Location spectatorLocation;
+    @Getter
+    private final int maxPlayersAmountInATeam;
     private final boolean stopServerIfGameIsOver;
     private final Plugin plugin;
     private final GameTimer gameTimer;
-    private final int maxPlayersAmountInATeam;
     private final int playerCountToStart;
     private int taskId;
 
@@ -73,7 +71,9 @@ public class Game {
         teamContainer.teleportEachTeam(endLocation);
         if (stopServerIfGameIsOver) {
             Bukkit.broadcastMessage("The server will shutdown in 30 seconds.");
-            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().shutdown(), 30 * 20);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                Bukkit.getServer().shutdown();
+            }, 30 * 20);
         }
     }
 
@@ -86,7 +86,6 @@ public class Game {
     }
 
     public void shutdown() {
-        stop();
         itemContainer.save();
         teamContainer.unregisterAllScoreboardTeams();
         teamContainer.save();
@@ -120,10 +119,16 @@ public class Game {
     }
 
     private void startGameIfTimerIsExpired() {
-        System.out.println("Start Game");
         gamePhase = GamePhase.RUNNING;
+        setAllPlayerIntoSurvivalMode();
         assignATeamToEachTeamlessPlayer();
         teamContainer.spawnEachTeam();
+    }
+
+    private void setAllPlayerIntoSurvivalMode() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            player.setGameMode(GameMode.SURVIVAL);
+        }
     }
 
     private void assignATeamToEachTeamlessPlayer() {
@@ -134,15 +139,16 @@ public class Game {
 
     public void addTeamlessPlayerToATeam(Player player) {
         for (Team team : teamContainer.getTeamList()) {
-            Collections.shuffle(teamContainer.getTeamList());
             if (team.getTeamSize() == maxPlayersAmountInATeam) {
                 continue;
             }
             if (teamContainer.playerHasTeam(player)) {
                 break;
             }
+            if (!teamContainer.isTeamWithLowestTeamSize(team)) {
+                continue;
+            }
             team.addTeamMember(player);
-            break;
         }
     }
 }
