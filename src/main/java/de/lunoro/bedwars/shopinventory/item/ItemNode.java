@@ -14,12 +14,11 @@ public class ItemNode {
 
     private ItemStack item;
     private final List<ItemNode> childrenList;
-    private final int index;
-    private final int price;
+    private final int index, price;
     private final String name;
     private final Material priceMaterial;
 
-    public ItemNode(Material material, String name, Material priceMaterial, int price, int index, List<ItemNode> childrenList) {
+    public ItemNode(Material material, String name, Material priceMaterial, int price, int amount, int index, List<ItemNode> childrenList) {
         this.item = new ItemBuilder(material)
                 .setName(name.replace("%p", String.valueOf(price)))
                 .setAmount(1)

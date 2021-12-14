@@ -17,7 +17,7 @@ public class ShopInventory {
     private final List<ItemNode> itemNodeList;
 
     public ShopInventory(List<ItemNode> itemNodeList, int inventorySize) {
-        this.inventory = Bukkit.getServer().createInventory(null, inventorySize);
+        this.inventory = Bukkit.getServer().createInventory(null, inventorySize, "Shop");
         this.itemNodeList = itemNodeList;
         setRootItemsIntoInventory();
     }
@@ -50,10 +50,12 @@ public class ShopInventory {
     public ItemNode getItemNode(int inventoryIndex) {
         for (ItemNode itemNode : itemNodeList) {
             if (itemNode.getIndex() == inventoryIndex) {
+                System.out.println(itemNode.getName());
                 return itemNode;
             }
             for (ItemNode child : itemNode.getChildrenList()) {
                 if (child.getIndex() == inventoryIndex) {
+                    System.out.println(child.getName());
                     return child;
                 }
             }

@@ -11,8 +11,6 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.Collections;
-
 public class Game {
 
     @Getter
@@ -24,13 +22,15 @@ public class Game {
     @Getter
     private GamePhase gamePhase;
     @Getter
-    private final Location spawnLocation;
+    private Location spawnLocation;
     @Getter
-    private final Location endLocation;
+    private Location endLocation;
     @Getter
-    private final Location spectatorLocation;
+    private Location spectatorLocation;
     @Getter
     private final int maxPlayersAmountInATeam;
+    @Getter
+    private boolean locationsLoadedSuccessfully;
     private final boolean stopServerIfGameIsOver;
     private final Plugin plugin;
     private final GameTimer gameTimer;
@@ -47,11 +47,18 @@ public class Game {
         this.gameTimer = new GameTimer();
 
         this.playerCountToStart = configContainer.getFile("config").getFileConfiguration().getInt("playerCountToStart");
+        this.maxPlayersAmountInATeam = configContainer.getFile("config").getFileConfiguration().getInt("maxPlayersInATeam");
+        this.stopServerIfGameIsOver = configContainer.getFile("config").getFileConfiguration().getBoolean("stopServerIfGameIsOver");
+
+        if (configContainer.getFile("locations").getFileConfiguration().getLocation("spawn") == null) {
+            Bukkit.getServer().shutdown();
+            return;
+        }
+
         this.spawnLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spawn");
         this.endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
         this.spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
-        this.maxPlayersAmountInATeam = configContainer.getFile("config").getFileConfiguration().getInt("maxPlayersInATeam");
-        this.stopServerIfGameIsOver = configContainer.getFile("config").getFileConfiguration().getBoolean("stopServerIfGameIsOver");
+        locationsLoadedSuccessfully = true;
     }
 
     public void start() {

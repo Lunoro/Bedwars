@@ -5,7 +5,6 @@ import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.listeners.*;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Bedwars extends JavaPlugin {
@@ -13,7 +12,6 @@ public final class Bedwars extends JavaPlugin {
     private Game game;
     private ConfigContainer configContainer;
     private boolean isStartedInBuildingMode;
-    private WorldCreator worldCreator;
 
     @Override
     public void onEnable() {
@@ -32,9 +30,15 @@ public final class Bedwars extends JavaPlugin {
 
     public void onDisable() {
         game.shutdown();
-        configContainer.getFile("locations").save();
+        saveLocations();
         saveResource("config.yml", false);
         saveResource("shopinventory.yml", false);
+    }
+
+    private void saveLocations() {
+        if (game.isLocationsLoadedSuccessfully()) {
+            configContainer.getFile("locations").save();
+        }
     }
 
     private void registerCommands() {

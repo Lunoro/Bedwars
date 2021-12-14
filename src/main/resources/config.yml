@@ -7,7 +7,7 @@ startInBuildingMode: true
 
 stopServerIfGameIsOver: true
 
-worldName: "world"
+worldName: "worldName"
 
 maxPlayersInATeam: 2
 

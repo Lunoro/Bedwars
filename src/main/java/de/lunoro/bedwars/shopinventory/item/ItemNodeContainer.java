@@ -14,6 +14,6 @@ public class ItemNodeContainer {
     public ItemNodeContainer(ConfigContainer configContainer) {
         Config shopInventoryConfig = configContainer.getFile("shopinventory");
         ItemNodeLoader itemNodeLoader = new ItemNodeLoader(shopInventoryConfig);
-        itemNodeList = itemNodeLoader.loadItemNodes();
+        itemNodeList = itemNodeLoader.load();
     }
 }

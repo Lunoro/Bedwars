@@ -35,7 +35,7 @@ public class InventoryClickListener implements Listener {
             return;
         }
 
-        if (itemNode.getPrice() == -1) {
+        if (itemNode.getPrice() == 0) {
             shopInventory.setChildItemsFromItemNode(itemNode);
             event.setCancelled(true);
             return;

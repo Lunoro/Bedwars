@@ -5,43 +5,39 @@ items:
         materialName: "SANDSTONE"
         name: "Blöcke"
         description: ""
-        priceItem: GOLD_INGOT
-        price: 0
+        priceItem: "SANDSTONE"
         inventoryIndex: 0
         children:
             '0':
-                materialName: SANDSTONE
-                name: "§d%price% §5%priceItem%"
-                description: "Sussy sandstone §d%price% §5%priceItem%"
+                materialName: "SANDSTONE"
+                name: "Sandstone"
+                description: "Sussy sandstone"
                 priceItem: GOLD_INGOT
-                price: 5
+                price: 2
+                amount: 5
                 inventoryIndex: 1
             '1':
-                materialName: YELLOW_BED
-                name: gelb
-                description: "a yellow bed"
+                materialName: "END_STONE"
+                name: "End Stone"
+                description: "Sussy end stone"
                 priceItem: GOLD_INGOT
                 price: 5
+                amount: 1
                 inventoryIndex: 2
     '1':
-        materialName: RED_BED
-        name: rot
-        description: "a red bed"
-        priceItem: GOLD_INGOT
-        price: 0
-        inventoryIndex: 3
-        children:
-            '0':
-                materialName: BLUE_BED
-                name: blau
-                description: "a blue bed again"
-                priceItem: GOLD_INGOT
-                price: 5
-                inventoryIndex: 4
-            '1':
-                materialName: YELLOW_BED
-                name: gelb
-                description: "a yellow bed again"
-                priceItem: GOLD_INGOT
-                price: 5
-                inventoryIndex: 5
+            materialName: "SANDSTONE"
+            name: "Blöcke"
+            description: ""
+            priceItem: "SANDSTONE"
+            inventoryIndex: 3
+            children:
+                '0':
+                    materialName: "STICK"
+                    name: "KnockKnock"
+                    enchantment: "knockback"
+                    enchantmentLevel: 5
+                    description: "Sussy stick"
+                    priceItem: GOLD_INGOT
+                    price: 10
+                    amount: 1
+                    inventoryIndex: 4
