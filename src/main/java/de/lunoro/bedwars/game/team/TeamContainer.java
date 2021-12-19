@@ -103,10 +103,8 @@ public class TeamContainer {
         for (Team team : teamList) {
             if (team.getTeamSize() < teamWithLowestSize.getTeamSize()) {
                 teamWithLowestSize = team;
-                System.out.println("Team with lowest amount has changed to: " + teamWithLowestSize.getName());
             }
         }
-        System.out.println("Team with lowest amount of teamMembers is: " + teamWithLowestSize.getName());
         return teamWithLowestSize;
     }
 

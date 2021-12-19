@@ -1,5 +1,6 @@
 package de.lunoro.bedwars.game;
 
+import de.lunoro.bedwars.blocks.PlacedBlocksContainer;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.spawner.ItemSpawnerContainer;
 import de.lunoro.bedwars.game.team.Team;
@@ -19,6 +20,8 @@ public class Game {
     private final ItemSpawnerContainer itemContainer;
     @Getter
     private final ShopInventoryRegistry shopInventoryRegistry;
+    @Getter
+    private final PlacedBlocksContainer placedBlocksContainer;
     @Getter
     private GamePhase gamePhase;
     @Getter
@@ -42,6 +45,7 @@ public class Game {
         this.teamContainer = new TeamContainer(configContainer);
         this.itemContainer = new ItemSpawnerContainer(configContainer);
         this.shopInventoryRegistry = new ShopInventoryRegistry(configContainer);
+        this.placedBlocksContainer = new PlacedBlocksContainer();
 
         this.gamePhase = GamePhase.START;
         this.gameTimer = new GameTimer();
@@ -145,12 +149,13 @@ public class Game {
     }
 
     public void addTeamlessPlayerToATeam(Player player) {
+        if (teamContainer.playerHasTeam(player)) {
+            return;
+        }
+
         for (Team team : teamContainer.getTeamList()) {
             if (team.getTeamSize() == maxPlayersAmountInATeam) {
                 continue;
-            }
-            if (teamContainer.playerHasTeam(player)) {
-                break;
             }
             if (!teamContainer.isTeamWithLowestTeamSize(team)) {
                 continue;

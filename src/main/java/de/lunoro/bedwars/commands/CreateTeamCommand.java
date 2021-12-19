@@ -1,6 +1,5 @@
 package de.lunoro.bedwars.commands;
 
-import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
 import de.lunoro.bedwars.game.team.TeamContainer;
 import lombok.AllArgsConstructor;

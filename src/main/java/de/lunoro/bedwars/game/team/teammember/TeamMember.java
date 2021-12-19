@@ -15,7 +15,6 @@ public class TeamMember {
     }
 
     public void switchRespawn() {
-        System.out.println("Switched");
         respawnable = false;
     }
 }

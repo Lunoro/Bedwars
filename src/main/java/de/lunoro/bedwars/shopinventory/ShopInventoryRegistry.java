@@ -16,7 +16,6 @@ public class ShopInventoryRegistry {
     public ShopInventoryRegistry(ConfigContainer configContainer) {
         this.shopInventoryMap = new HashMap<>();
         this.itemNodeContainer = new ItemNodeContainer(configContainer);
-        System.out.println(itemNodeContainer.getItemNodeList());
         this.shopInventorySize = configContainer.getFile("shopinventory").getFileConfiguration().getInt("inventorySize");
     }
 

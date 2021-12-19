@@ -21,9 +21,9 @@ public class PlayerInteractEntityListener implements Listener {
     public void onPlayerInteract(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
 
-        //if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
-        //    return;
-        //}
+        if (isBuildingMode || !game.getGamePhase().equals(GamePhase.RUNNING)) {
+            return;
+        }
 
         if (event.getRightClicked().getType().equals(EntityType.PLAYER)) {
             return;

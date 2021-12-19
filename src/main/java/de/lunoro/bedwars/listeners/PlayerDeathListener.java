@@ -37,9 +37,7 @@ public class PlayerDeathListener implements Listener {
         }
 
         game.getTeamContainer().updateStatusOfAllTeams();
-        System.out.println(game);
 
-        System.out.println(game.getTeamContainer().getTeamsAlive());
         if (game.getTeamContainer().getTeamsAlive() == 1) {
             Bukkit.broadcastMessage(game.getTeamContainer().getWinnerTeam().getName() + " has won.");
             game.stop();

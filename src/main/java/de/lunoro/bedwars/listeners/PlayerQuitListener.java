@@ -2,7 +2,6 @@ package de.lunoro.bedwars.listeners;
 
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.game.team.Team;
-import de.lunoro.bedwars.game.team.TeamContainer;
 import de.lunoro.bedwars.game.team.teammember.TeamMember;
 import lombok.AllArgsConstructor;
 import org.bukkit.Bukkit;
