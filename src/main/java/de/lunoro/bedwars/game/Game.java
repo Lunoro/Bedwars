@@ -12,6 +12,10 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class Game {
 
     @Getter
@@ -82,9 +86,7 @@ public class Game {
         teamContainer.teleportEachTeam(endLocation);
         if (stopServerIfGameIsOver) {
             Bukkit.broadcastMessage("The server will shutdown in 30 seconds.");
-            Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                Bukkit.getServer().shutdown();
-            }, 30 * 20);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getServer().shutdown(), 30 * 20);
         }
     }
 
@@ -143,24 +145,21 @@ public class Game {
     }
 
     private void assignATeamToEachTeamlessPlayer() {
+        List<Team> sorted = new ArrayList<>(teamContainer.getTeamList());
         for (Player player : Bukkit.getOnlinePlayers()) {
-            addTeamlessPlayerToATeam(player);
+            sorted.sort(Comparator.comparingInt(Team::getTeamSize).reversed());
+            addTeamlessPlayerToATeam(player, sorted);
         }
     }
 
-    public void addTeamlessPlayerToATeam(Player player) {
-        if (teamContainer.playerHasTeam(player)) {
-            return;
-        }
-
-        for (Team team : teamContainer.getTeamList()) {
+    private void addTeamlessPlayerToATeam(Player player, List<Team> sorted) {
+        assert !teamContainer.playerHasTeam(player);
+        for (Team team : sorted) {
             if (team.getTeamSize() == maxPlayersAmountInATeam) {
                 continue;
             }
-            if (!teamContainer.isTeamWithLowestTeamSize(team)) {
-                continue;
-            }
             team.addTeamMember(player);
+            break;
         }
     }
 }
