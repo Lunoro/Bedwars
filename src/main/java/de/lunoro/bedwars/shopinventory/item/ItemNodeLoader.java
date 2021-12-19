@@ -40,7 +40,6 @@ public class ItemNodeLoader {
         Material priceItem = Material.getMaterial(priceItemName);
 
         if (material == null) {
-            System.out.println("Material not found!");
             return null;
         }
         if (priceItem == null) {
