@@ -58,15 +58,9 @@ public class Game {
         this.maxPlayersAmountInATeam = configContainer.getFile("config").getFileConfiguration().getInt("maxPlayersInATeam");
         this.stopServerIfGameIsOver = configContainer.getFile("config").getFileConfiguration().getBoolean("stopServerIfGameIsOver");
 
-        if (configContainer.getFile("locations").getFileConfiguration().getLocation("spawn") == null) {
-            Bukkit.getServer().shutdown();
-            return;
-        }
-
         this.spawnLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spawn");
         this.endLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("end");
         this.spectatorLocation = configContainer.getFile("locations").getFileConfiguration().getLocation("spectator");
-        locationsLoadedSuccessfully = true;
     }
 
     public void start() {

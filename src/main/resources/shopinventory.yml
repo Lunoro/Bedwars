@@ -2,42 +2,42 @@ inventorySize: 18
 
 items:
     '0':
-        materialName: "SANDSTONE"
-        name: "Blöcke"
-        description: ""
-        priceItem: "SANDSTONE"
-        inventoryIndex: 0
-        children:
-            '0':
-                materialName: "SANDSTONE"
-                name: "Sandstone"
-                description: "Sussy sandstone"
-                priceItem: GOLD_INGOT
-                price: 2
-                amount: 5
-                inventoryIndex: 1
-            '1':
-                materialName: "END_STONE"
-                name: "End Stone"
-                description: "Sussy end stone"
-                priceItem: GOLD_INGOT
-                price: 5
-                amount: 1
-                inventoryIndex: 2
+          materialName: "SANDSTONE"
+          name: "Blöcke"
+          description: ""
+          priceItem: "SANDSTONE"
+          inventoryIndex: 0
+          children:
+              '0':
+                  materialName: "SANDSTONE"
+                  name: "Sandstone"
+                  description: "Sussy sandstone"
+                  priceItem: GOLD_INGOT
+                  price: 2
+                  amount: 5
+                  inventoryIndex: 1
+              '1':
+                  materialName: "END_STONE"
+                  name: "End Stone"
+                  description: "Sussy end stone"
+                  priceItem: GOLD_INGOT
+                  price: 5
+                  amount: 1
+                  inventoryIndex: 2
     '1':
-            materialName: "SANDSTONE"
-            name: "Blöcke"
-            description: ""
-            priceItem: "SANDSTONE"
-            inventoryIndex: 3
-            children:
-                '0':
-                    materialName: "STICK"
-                    name: "KnockKnock"
-                    enchantment: "knockback"
-                    enchantmentLevel: 5
-                    description: "Sussy stick"
-                    priceItem: GOLD_INGOT
-                    price: 10
-                    amount: 1
-                    inventoryIndex: 4
+          materialName: "SANDSTONE"
+          name: "Blöcke"
+          description: ""
+          priceItem: "SANDSTONE"
+          inventoryIndex: 3
+          children:
+              '0':
+                  materialName: "STICK"
+                  name: "KnockKnock"
+                  enchantment: "knockback"
+                  enchantmentLevel: 5
+                  description: "Sussy stick"
+                  priceItem: GOLD_INGOT
+                  price: 10
+                  amount: 1
+                  inventoryIndex: 4

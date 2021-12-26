@@ -3,12 +3,10 @@ version: '${project.version}'
 main: de.lunoro.bedwars.Bedwars
 api-version: 1.17
 authors: [Lunoro]
-depend: [ProtocolLib]
 commands:
     forcestart:
     setlocation:
     createitemspawner:
-    additemspawnerlocation:
     additemspawnerlocation:
     removeitemspawnerlocation:
     removeteam:

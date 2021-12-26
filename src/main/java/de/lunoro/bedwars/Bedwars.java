@@ -1,9 +1,11 @@
 package de.lunoro.bedwars;
 
 import de.lunoro.bedwars.commands.*;
+import de.lunoro.bedwars.config.Config;
 import de.lunoro.bedwars.config.ConfigContainer;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.listeners.*;
+import de.lunoro.bedwars.world.WorldLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,20 +13,28 @@ public final class Bedwars extends JavaPlugin {
 
     private Game game;
     private ConfigContainer configContainer;
+    private WorldLoader worldLoader;
     private boolean isStartedInBuildingMode;
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         saveResource("config.yml", false);
         saveResource("shopinventory.yml", false);
         init();
+        worldLoader.replaceWorld();
+    }
+
+    @Override
+    public void onEnable() {
         registerEvents();
         registerCommands();
     }
 
     private void init() {
         configContainer = new ConfigContainer(this);
-        isStartedInBuildingMode = configContainer.getFile("config").getFileConfiguration().getBoolean("startInBuildingMode");
+        final Config defaultConfig = configContainer.getFile("config");
+        worldLoader = new WorldLoader(defaultConfig.getString("worldName"), this);
+        isStartedInBuildingMode = defaultConfig.getFileConfiguration().getBoolean("startInBuildingMode");
         game = new Game(this, configContainer);
     }
 
