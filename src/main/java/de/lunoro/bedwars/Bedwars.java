@@ -79,4 +79,3 @@ public final class Bedwars extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new InventoryCloseListener(game.getShopInventoryRegistry()), this);
     }
 }
-

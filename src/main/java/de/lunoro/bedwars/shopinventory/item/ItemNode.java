@@ -1,6 +1,6 @@
 package de.lunoro.bedwars.shopinventory.item;
 
-import de.lunoro.bedwars.builder.ItemBuilder;
+import de.lunoro.bedwars.itembuilder.ItemBuilder;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

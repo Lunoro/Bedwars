@@ -1,6 +1,6 @@
 package de.lunoro.bedwars.listeners;
 
-import de.lunoro.bedwars.builder.ItemBuilder;
+import de.lunoro.bedwars.itembuilder.ItemBuilder;
 import de.lunoro.bedwars.game.Game;
 import de.lunoro.bedwars.shopinventory.ShopInventory;
 import de.lunoro.bedwars.shopinventory.item.ItemNode;

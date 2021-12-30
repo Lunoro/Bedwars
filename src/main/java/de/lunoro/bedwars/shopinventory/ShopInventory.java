@@ -1,6 +1,6 @@
 package de.lunoro.bedwars.shopinventory;
 
-import de.lunoro.bedwars.builder.ItemBuilder;
+import de.lunoro.bedwars.itembuilder.ItemBuilder;
 import de.lunoro.bedwars.shopinventory.item.ItemNode;
 import lombok.Getter;
 import org.bukkit.Bukkit;

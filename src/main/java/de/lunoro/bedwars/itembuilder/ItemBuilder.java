@@ -1,4 +1,4 @@
-package de.lunoro.bedwars.builder;
+package de.lunoro.bedwars.itembuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

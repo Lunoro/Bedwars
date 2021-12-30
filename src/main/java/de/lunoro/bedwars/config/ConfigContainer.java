@@ -24,11 +24,6 @@ public class ConfigContainer {
         return config;
     }
 
-    public void reloadFiles() {
-        files.values().forEach(Config::load);
-        files.values().forEach(Config::save);
-    }
-
     public Config create(Plugin plugin, String configName) {
         if (!plugin.getDataFolder().exists()) {
             plugin.getDataFolder().mkdir();
